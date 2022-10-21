@@ -1,0 +1,1 @@
+export const logo = '../assets/images/logo_ptit.png';
