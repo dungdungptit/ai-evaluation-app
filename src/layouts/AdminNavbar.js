@@ -46,13 +46,14 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 }));
 
 const pages = [
-    { name: 'Problems', linkTo: "problems" },
-    { name: 'History', linkTo: "history" },
-    { name: 'Guide', linkTo: "guide" },
-    { name: 'Contact', linkTo: "contact" },
+    { name: 'Problems', linkTo: "admin/problems" },
+    { name: 'Users', linkTo: "admin/users" },
+    { name: 'Group', linkTo: "admin/group" },
+    { name: 'Subgroup', linkTo: "admin/subgroup" },
+    { name: 'Submission', linkTo: "admin/submission" },
 ]
 
-const Navbar = () => {
+const AdminNavbar = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);
 
     const handleOpenNavMenu = (event) => {
@@ -66,7 +67,7 @@ const Navbar = () => {
     return (
         <RootStyle>
             <ToolbarStyle>
-                <Box component={Link} to='problems' sx={{
+                <Box component={Link} to='admin/problems' sx={{
                     display: { xs: 'none', md: 'flex' },
                     alignItems: 'center',
                     cursor: 'pointer',
@@ -148,7 +149,7 @@ const Navbar = () => {
                 </Box>
 
                 <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: "center", my: "auto" }}>
-                    <Box component={Link} to='/' sx={{
+                    <Box component={Link} to='admin/problems' sx={{
                         display: { xs: 'flex', md: 'none' },
                         alignItems: 'center',
                         cursor: 'pointer',
@@ -217,4 +218,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default AdminNavbar

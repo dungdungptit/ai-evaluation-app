@@ -1,11 +1,12 @@
 // @mui
-import { Container, Typography, Paper, Box, TextField, IconButton, Stack } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Container, Typography, Paper, Box, TextField, IconButton, Stack, Button, Breadcrumbs, Link } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Fragment, useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import AddIcon from '@mui/icons-material/Add';
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // import data
 import { problems } from '../data/problems';
@@ -15,7 +16,7 @@ const rowsData = problems;
 
 const columns = [
   { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'No', minWidth: 70, sortable: false, },
-  { field: 'problems', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 250, flex: 2 },
+  { field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 250, flex: 2 },
   { field: 'group', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false, },
   { field: 'subgroup', headerClassName: 'super-app-theme--header', headerName: 'Sub group', minWidth: 200, flex: 1, sortable: false },
   { field: 'submit', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submits', mi10: 100, sortable: false },
@@ -29,8 +30,11 @@ const escapeRegExp = (value) => {
 
 const Problems = () => {
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const [searchText, setSearchText] = useState('');
   const [rows, setRows] = useState(rowsData);
+  const location = useLocation();
 
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
@@ -54,8 +58,13 @@ const Problems = () => {
     console.log("Row:");
     console.log(param);
     console.log(event);
-    // navigate(`${param.row.id}`, param.row);
-    navigate(`problems/${param.row.id}`, {state: param.row});
+    console.log(location.pathname);
+    if (location.pathname === "/problems") {
+      navigate(`${param.row.id}`, { state: param.row });
+    }
+    else {
+      navigate(`problems/${param.row.id}`, { state: param.row });
+    }
   };
 
   return (
@@ -73,7 +82,7 @@ const Problems = () => {
               height: 300,
               width: '100%',
               '& .super-app-theme--header': {
-                backgroundColor: '#ececec',
+                // backgroundColor: '#ececec',
               },
               '& .css-1jbbcbn-MuiDataGrid-columnHeaderTitle': {
                 fontWeight: '600',
@@ -104,7 +113,19 @@ const Problems = () => {
                   lg: "row",
                 },
               }}>
-              <Typography variant="h4">Problems</Typography>
+              <Typography variant="h4" sx={{
+                fontSize: { xs: "1.5rem", sm: "1.5rem", md: "2rem", lg: "2rem" },
+                fontWeight: 700,
+              }}>
+                Problems
+                <Breadcrumbs maxItems={2} aria-label="breadcrumb" sx={{ mt: 1 }}>
+                  <Link underline="hover" color="inherit" href="">
+                    Home
+                  </Link>
+                  <Typography color="text.primary">Problems</Typography>
+                </Breadcrumbs>
+              </Typography>
+
               <TextField
                 variant="standard"
                 value={searchText}
@@ -141,20 +162,24 @@ const Problems = () => {
               />
             </Stack>
 
-
             <DataGrid
               rows={rows}
               columns={columns}
               onRowClick={handleRowClick}
-              disableSelectionOnClick
               disableColumnMenu
+              disableColumnSelector
+              disableSelectionOnClick
               // hideFooter
               autoHeight
-              disableColumnSelector
               pageSize={pageSize}
               rowsPerPageOptions={[10]}
+              // disableColumnFilter
+              disableDensitySelector
               sx={{
                 '& .MuiDataGrid-row': { cursor: 'pointer' },
+                "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+                  outline: "none"
+                }
               }}
             // rowCount={100}
             />

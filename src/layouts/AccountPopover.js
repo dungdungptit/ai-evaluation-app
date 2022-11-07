@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
-import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import account from "../data/account";
 
 const MENU_OPTIONS = [
@@ -22,6 +22,11 @@ const MENU_OPTIONS = [
 ];
 
 const AccountPopover = () => {
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    // console.log(location.state);
+
     const [anchorElAccount, setAnchorElAccount] = useState(null);
 
     const handleOpenAccountMenu = (event) => {
@@ -32,12 +37,17 @@ const AccountPopover = () => {
         setAnchorElAccount(null);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     return (
         <Fragment>
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenAccountMenu} sx={{ p: 0 }}>
-                        <Avatar alt={account.name} src={account.photoURL} sx={{ width: 32, height: 32 }}/>
+                        <Avatar alt={account.name} src={account.photoURL} sx={{ width: 32, height: 32 }} />
                     </IconButton>
                 </Tooltip>
                 <Menu
@@ -78,7 +88,7 @@ const AccountPopover = () => {
 
                     <Divider sx={{ borderStyle: 'solid' }} />
 
-                    <MenuItem onClick={handleCloseAccountMenu} sx={{ py: 1, mt: 1 }}>
+                    <MenuItem onClick={handleLogout} sx={{ py: 1, mt: 1 }}>
                         Logout
                     </MenuItem>
                 </Menu>
