@@ -4,9 +4,9 @@ import { Navigate, Outlet } from 'react-router-dom'
 const useAuth = () => {
     const user = localStorage.getItem('user')
     console.log(JSON.parse(user));
-    if (user && JSON.parse(user).roles.includes('admin')) {
+    if (user && JSON.parse(user).role.includes('admin')) {
         return "admin";
-    } else if (user && JSON.parse(user).roles.includes('user')) {
+    } else if (user && JSON.parse(user).role.includes('user')) {
         return "user";
     } else {
         return false;
@@ -27,7 +27,7 @@ const PublicRoutes = () => {
     }
         // return auth ? <Navigate to="/admin" /> : <Outlet />
     // }
-    // else if(auth && auth.roles.includes('user')){
+    // else if(auth && auth.role.includes('user')){
         // return auth ? <Navigate to="/problems" /> : <Outlet />
     // }  
 }

@@ -15,6 +15,7 @@ import Users from '../pages/admin/Users';
 import ProblemItemNew from '../pages/admin/ProblemItemNew';
 import AdminProblems from '../pages/admin/AdminProblems';
 import AdminProblemItem from '../pages/admin/AdminProblemItem';
+import Register from '../pages/Register';
 
 const AppRouter = () => {
 
@@ -33,24 +34,24 @@ const AppRouter = () => {
         <Routes>
             <Route element={<ProtectedRoutes />}>
                 <Route path="" element={<Layout />}>
-                    <Route index element={!!auth && auth.roles.includes('admin') ? <AdminProblems /> : <Problems />} />
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin" element={<AdminProblems />} />}
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin/problems" element={<AdminProblems />} />}
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin/users" element={<Users />} />}
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin/problems/:id" element={<AdminProblemItem />} />}
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin/problems/add" element={<ProblemItemNew state = {"add"} />} />}
-                    {!!auth && auth.roles.includes('admin') && <Route path="admin/problems/edit/:id" element={<ProblemItemNew state = {"edit"} />} />}
-                    
+                    <Route index element={!!auth && auth.role.includes('admin') ? <AdminProblems /> : <Problems />} />
+                    {!!auth && auth.role.includes('admin') && <Route path="admin" element={<AdminProblems />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems" element={<AdminProblems />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/users" element={<Users />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/:id" element={<AdminProblemItem />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/add" element={<ProblemItemNew state={"add"} />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/edit/:id" element={<ProblemItemNew state={"edit"} />} />}
+
                     <Route path="problems" element={<Problems />} />
                     <Route path="problems/:id" element={<ProblemItem />} />
                     <Route path="history" element={<History />} />
                     <Route path="guide" element={<Guide />} />
                     <Route path="contact" element={<Contact />} />
-
                 </Route>
                 <Route path="*" element={<Page404 to="/404" />} />
             </Route>
             <Route path="*" element={<PublicRoutes />}>
+                <Route path='register' element={<Register />} />
                 <Route path="login" element={<Login />} />
             </Route>
         </Routes>

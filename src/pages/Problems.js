@@ -118,12 +118,6 @@ const Problems = () => {
                 fontWeight: 700,
               }}>
                 Problems
-                <Breadcrumbs maxItems={2} aria-label="breadcrumb" sx={{ mt: 1 }}>
-                  <Link underline="hover" color="inherit" href="">
-                    Home
-                  </Link>
-                  <Typography color="text.primary">Problems</Typography>
-                </Breadcrumbs>
               </Typography>
 
               <TextField

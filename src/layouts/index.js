@@ -37,7 +37,7 @@ const AdminMainStyle = styled('div')(({ theme }) => ({
     paddingBottom: theme.spacing(10),
     [theme.breakpoints.up('lg')]: {
         // paddingTop: APP_BAR_DESKTOP + 24,
-        paddingLeft: theme.spacing(2),
+        paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(2),
         paddingTop: theme.spacing(4),
     },
@@ -55,8 +55,8 @@ const Layout = () => {
 
     return (
         <RootStyle>
-            {!!user && user.roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-            {(!!user && user.roles.includes('admin'))
+            {!!user && user.role.includes('admin') ? <AdminNavbar /> : <Navbar />}
+            {(!!user && user.role.includes('admin'))
                 ?
                 <AdminMainStyle sx={{
                     display: 'flex',

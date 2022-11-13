@@ -1,16 +1,20 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
 import { Stack } from '@mui/system';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo_ptit.png';
+import axios from 'axios';
+import { base_URL } from '../../utils/constants';
+
+const api = '/api/v1/auth/login';
 
 const LoginForm = () => {
 
   const [values, setValues] = useState({
     username: '',
     password: '',
-    error: false,
+    resMessage: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -20,38 +24,34 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // console.log(values);
-    const userRes = {
-      username: "B19DCCN120",
-      roles: ['admin'],
-      // roles: ['user'],
-      error: false,
-    };
-
-    if (values.username === userRes.username) {
-      setValues({
-        username: '',
-        password: '',
-        error: false,
+    const { username, password } = values;
+    const userRes = async () => {
+      const response = await axios.post(base_URL + api, {
+        username,
+        password
       });
-      setShowPassword(false);
-      localStorage.setItem('user', JSON.stringify(userRes));
-
-      if (userRes.roles.includes('admin')) {
-        navigate('/admin');
-      } else if (userRes.roles.includes('user')) {
-        navigate('/problems');
-      }
-      // navigate('/problems', { state: userRes });
-    } else {
-      setValues({
-        ...values,
-        error: true,
-      });
-      setShowPassword(false);
+      return response;
     }
 
+    userRes().then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        localStorage.setItem('user', JSON.stringify(res.data.data));
+        if (res.data.data.role.includes('admin')) {
+          navigate('/admin/problems');
+        } else if (res.data.data.role.includes('superadmin')) {
+          navigate('/admin/problems');
+        }
+        else if (res.data.data.role.includes('user')) {
+          navigate('/problems');
+        }
+      }
+    }).catch((err) => {
+      // console.log(err);
+      setValues({ ...values, resMessage: err.response.data.resMessage });
+      console.log(values.resMessage);
 
+    })
   }
 
   const handleChange = (prop) => (e) => {
@@ -89,9 +89,9 @@ const LoginForm = () => {
             <Typography variant="h5" component="h1" fontWeight="bold" gutterBottom>
               Login
             </Typography>
-            {values.error && (
+            {values.resMessage && (
               <Typography variant="h6" component="h1" fontWeight='bold' gutterBottom >
-                Login failed
+                {values.resMessage}
               </Typography>
             )}
           </Box>
@@ -136,9 +136,14 @@ const LoginForm = () => {
 
             <Button type='submit' variant="contained">Submit</Button>
 
-            <Typography variant="body2" component="a" href='/' sx={{ textAlign: "center", textDecoration: "none", color: "text.primary" }}>
-              Forgot password?
-            </Typography>
+            {/* Don't have account, go to register and Forgot password */}
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              Don't have account? <Link href="/register">Register</Link>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              Forgot password? <Link href="/forgot-password">Reset</Link>
+             
+            </Box>
           </Stack>
         </Box>
       </Box>

@@ -4,13 +4,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Container, Typography, Paper, Box, TextField, IconButton, Stack, backdropClasses } from '@mui/material';
+import { Container, Typography, Paper, Box, TextField, IconButton, Stack, backdropClasses, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { problems } from '../../data/problems';
 import { history } from "../../data/historys";
-
-
+import jupyter_img from "../../assets/images/1200px-Jupyter_logo.svg.png"
 
 const columns = [
   { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'ID', minWidth: 50, sortable: false, },
@@ -35,7 +34,7 @@ const ProblemItem = () => {
   const ProblemItem = problems.find((problem) => problem.id.toString() === params.id);
   console.log("param", ProblemItem);
   const rowsData = history.filter((history) => history.problemId === ProblemItem.id);
-  
+
   const pageSize = rowsData.length;
 
   useEffect(() => {
@@ -46,7 +45,6 @@ const ProblemItem = () => {
 
   return (
     <Fragment>
-      <Container maxWidth="lg">
         <Paper sx={{
           height: 'auto',
           minWidth: { xs: 300, sm: 600, md: 900 }, py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 },
@@ -55,7 +53,7 @@ const ProblemItem = () => {
           {ProblemItem && (
             <Fragment>
               <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom>
-                Problems : {ProblemItem.title}
+                {ProblemItem.title}
               </Typography>
 
               <Paper sx={{ display: 'flex', flexDirection: 'column', height: 'auto', py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 } }}>
@@ -77,6 +75,21 @@ const ProblemItem = () => {
                   </Box>
                   {ProblemItem.outputDescription}
                 </Typography>
+                {/* button blank to jupyterhub */}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 2 }}>
+                  <Button
+                    sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
+                    color="primary"
+                    aria-label="upload picture"
+                    component="a"
+                    startIcon={<img src={jupyter_img} alt="jupyter" width="32px" />}
+                    variant="contained"
+                    href="http://localhost:8888/lab"
+                    target="_blank"
+                  >
+                      Setup Environment
+                  </Button>
+                </Box>
               </Paper>
 
 
@@ -153,7 +166,6 @@ const ProblemItem = () => {
             </Fragment>
           )}
         </Paper>
-      </Container>
     </Fragment >
   )
 }

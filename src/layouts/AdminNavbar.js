@@ -43,6 +43,10 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
         // minHeight: APPBAR_DESKTOP,
         padding: theme.spacing(0, 5),
     },
+    [theme.breakpoints.down('md')]: {
+        paddingLeft: 0,
+        paddingRight: 0,
+    },
 }));
 
 const pages = [
@@ -190,19 +194,7 @@ const AdminNavbar = () => {
                     </Typography> */}
                 </Box>
 
-                <List sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {pages.map((page) => (
-                        <Button
-                            key={page.name}
-                            onClick={handleCloseNavMenu}
-                            component={Link}
-                            to={page.linkTo}
-                            sx={{ my: 0, color: 'inherit', display: 'block' }}
-                        >
-                            {page.name}
-                        </Button>
-                    ))}
-                </List>
+                
 
 
                 {/* <Searchbar /> */}

@@ -44,7 +44,7 @@ const Problems = () => {
         { field: 'subgroup', headerClassName: 'super-app-theme--header', headerName: 'Sub group', minWidth: 200, flex: 1, sortable: false },
         { field: 'submit', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submits', minWidth: 100, sortable: false },
         {
-            field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 100, sortable: false,
+            field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 200, sortable: false,
             renderCell: (params) => {
                 const onClick = (e) => {
                     const currentRow = params.row;
@@ -96,7 +96,7 @@ const Problems = () => {
                     <Stack direction='row'
                         sx={{
                             py: { xs: 1, md: 3 },
-                            pt: { xs: 3, md: 1 },
+                            pt: { xs: 3, md: 2 },
                             px: 0,
                             justifyContent: {
                                 xs: "center",
@@ -118,7 +118,7 @@ const Problems = () => {
                             },
                         }}>
                         <Typography variant="h4" sx={{
-                            fontSize: { xs: "1.5rem", sm: "1.5rem", md: "2rem", lg: "2rem" },
+                            fontSize: "1.5rem",
                             fontWeight: 700,
                         }}>
                             Problems
