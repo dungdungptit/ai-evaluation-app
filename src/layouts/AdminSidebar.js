@@ -1,74 +1,117 @@
 import { Box, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Stack, styled, Typography } from '@mui/material';
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import QuizIcon from '@mui/icons-material/Quiz';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import WebAssetIcon from '@mui/icons-material/WebAsset';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import useWindowDimensions from '../components/useWindowDimensions/useWindowDimensions';
 
 const SidebarBox = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
 })
 
-const AdminSidebar = () => {
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+const getIndex = (path) => {
+    // get first part of path
+    const index = path.split('/')[1];
+    switch (index) {
+        case 'admin/problems':
+            return 0;
+        case 'admin/users':
+            return 1;
+        case 'admin/group':
+            return 2;
+        case 'admin/subgroup':
+            return 3;
+        case 'admin/submission':
+            return 4;
+        default:
+            return -1;
+    }
+}
 
-    const navigate = useNavigate();
+const AdminSidebar = () => {
+    const location = useLocation();
+    const { pathname } = location;
+    // console.log(pathname);
+    const [selectedIndex, setSelectedIndex] = React.useState(getIndex(pathname));
+
+    const [open, setOpen] = React.useState(true);
+    const { width } = useWindowDimensions();
+
+    useEffect(() => {
+        if (width < 900) {
+            setOpen(false);
+        } else {
+            setOpen(true);
+        }
+    }, [width, pathname]);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClickClose = () => {
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        setSelectedIndex(getIndex(pathname));
+    }, [pathname])
 
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
-        if(index === 0) {
-            console.log("index = 0");
-            navigate('/');
-        }
-        else if(index === 1) {
-            console.log("index = 1");
-            navigate('/admin/problems');
-        }
-        else if(index === 2) {
-            console.log("index = 2");
-            navigate('/admin/group');
-        }
-        else if(index === 3) {
-            console.log("index = 3");
-            navigate('/admin/subgroup');
-        }
-        else if(index === 4) {
-            console.log("index = 4");
-            navigate('admin/submission');
-        }
     };
 
     return (
-      <Stack sx={{
-        display: { xs: 'none', lg: 'flex' },
-        minWidth: { xs: 0, lg: 280 },
-      }}>
-            <SidebarBox p={1}>
-                <Link className='' to={"/"} style={{textDecoration: 'none'}}>
-                    <Stack direction="row" spacing={0} alignItems="center">
-                        <Typography variant="h6" component="h1" sx={{ flexGrow: 1, p: 1, color: "#000", fontWeight: "bold" }}>
-                            AI Evalution App
+        <Stack sx={{
+            // display: { xs: 'none', lg: 'flex' },
+            display: 'flex',
+            position: { 
+                xs: open ? 'fixed' : 'relative', 
+                md: 'relative',
+                lg: 'relative' 
+            },
+            zIndex: open ? 402 : 1,
+            borderRight: {
+                xs: open ? '1px solid #e0e0e0' : 'none',
+                md: 'relative',
+                lg: "none",
+            },
+            backgroundColor: '#fff',
+            minWidth: open ? 280 : 72,
+            width: open ? { xs: 0, lg: 280 } : { xs: 0, lg: 72 },
+            transition: 'all 0.3s linear',
+            height: "100vh",
+        }}>
+            <SidebarBox p={2} sx={{p: open ? 2 : 1, py: 1, transition: 'all 0.3s linear', }} >
+                <Stack direction="row" spacing={0}
+                    sx={{
+                        alignItems: 'center',
+                        justifyContent: open ? 'space-between' : 'center',
+                        height: 48,
+                    }}
+                >
+                    <Link className='' to={"/"} style={{ textDecoration: "none", }}>
+                        <Typography variant="h6" component="h1" sx={{ flexGrow: 1, p: 1, whiteSpace: "nowrap", color: "#000", fontWeight: "bold", display: open ? "block" : "none" }}>
+                            AI Evaluation App
                         </Typography>
-                        <MenuOpenIcon sx={{
-                          color: "#6d7073",
-                        }} />
-                    </Stack>
-                </Link>
+                    </Link>
+
+                    <MenuIcon sx={{ display: open ? "none" : "block", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickOpen} />
+                    <MenuOpenIcon sx={{ display: open ? "block" : "none", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickClose} />
+                </Stack>
+                        
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
-                    // subheader={
-                    //     <ListSubheader component="div" id="nested-list-subheader">
-                    //         Nested List Items
-                    //     </ListSubheader>
-                    // }
                 >
                     <ListItemButton
                         component={Link}
@@ -79,7 +122,7 @@ const AdminSidebar = () => {
                         <ListItemIcon>
                             <QuizIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Problems" />
+                        <ListItemText primary="Problems" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -90,7 +133,7 @@ const AdminSidebar = () => {
                         <ListItemIcon>
                             <AccountBoxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="User" />
+                        <ListItemText primary="User" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -101,7 +144,7 @@ const AdminSidebar = () => {
                         <ListItemIcon>
                             <WebAssetIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Group" />
+                        <ListItemText primary="Group" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -112,7 +155,7 @@ const AdminSidebar = () => {
                         <ListItemIcon>
                             <DynamicFeedIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Subroup" />
+                        <ListItemText primary="Subroup" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -123,7 +166,7 @@ const AdminSidebar = () => {
                         <ListItemIcon>
                             <CheckBoxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Submission" />
+                        <ListItemText primary="Submission" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
                     
                 </List>

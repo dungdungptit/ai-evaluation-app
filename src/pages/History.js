@@ -1,13 +1,12 @@
 // @mui
-import { Container, Typography, Paper, Box, TextField, IconButton, Stack } from '@mui/material';
+import { Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Fragment, useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
 
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { history } from "../data/historys";
+import { BoxProblems, BoxTitle } from '../components/Box/BoxContainer';
 const rowsData = history;
 
 const columns = [
@@ -20,7 +19,7 @@ const columns = [
   { field: 'excutionMemories', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Execution memory', minWidth: 100, flex: 1, sortable: false, },
 ];
 
-const pageSize = rowsData.length; 
+const pageSize = rowsData.length;
 
 const History = () => {
 
@@ -32,82 +31,37 @@ const History = () => {
     console.log(param);
     console.log(event);
     // navigate(`${param.row.id}`, param.row);
-    navigate(`/problems/${param.row.id}`, {state: param.row});
+    navigate(`/problems/${param.row.id}`, { state: param.row });
   };
 
   return (
-    <Fragment>
-      <Container maxWidth="xl">
-        <Paper sx={{
-          height: {
-            xs: 108 + 6 * 16 + 52 + (pageSize * 52) + 'px',
-            md: 108 + 3 * 16 + 52 + (pageSize * 52) + 'px'
-          },
-          minWidth: { xs: 300, sm: 600, md: 900 }, py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 }
-        }} >
-          <Box
+    <BoxProblems>
+      <BoxTitle>
+        <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom sx={{ mt: 3 }}>
+          History
+        </Typography>
+          <DataGrid
+            rows={rowsData}
+            columns={columns}
+            onRowClick={handleRowClick}
+            disableSelectionOnClick
+            disableColumnMenu
+            hideFooter
+            autoHeight
+            disableColumnSelector
+            pageSize={pageSize}
+            rowsPerPageOptions={[20]}
             sx={{
-              height: 300,
-              width: '100%',
-              '& .super-app-theme--header': {
-                backgroundColor: '#ececec',
-              },
-              '& .css-1jbbcbn-MuiDataGrid-columnHeaderTitle': {
-                fontWeight: '600',
+              '& .MuiDataGrid-row': { cursor: 'pointer' },
+              "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+                outline: "none"
               }
             }}
-          >
-            <Stack direction='row'
-              sx={{
-                py: { xs: 1, md: 3 },
-                pt: { xs: 3, md: 1 },
-                px: { xs: 0, sm: 4, md: 0, lg: 0 },
-                justifyContent: {
-                  xs: "center",
-                  sm: "space-between",
-                  md: "space-between",
-                  lg: "space-between",
-                },
-                alignItems: {
-                  xs: "space-between",
-                  sm: "center",
-                  md: "center",
-                  lg: "center",
-                },
-                flexDirection: {
-                  xs: "column",
-                  sm: "row",
-                  md: "row",
-                  lg: "row",
-                },
-              }}>
-              <Typography variant="h4">History</Typography>
-            </Stack>
+          // rowCount={100}
+          />
+      </BoxTitle>
+    </BoxProblems>
 
-
-            <DataGrid
-              rows={rowsData}
-              columns={columns}
-              onRowClick={handleRowClick}
-              disableSelectionOnClick
-              disableColumnMenu
-              hideFooter
-              autoHeight
-              disableColumnSelector
-              pageSize={pageSize}
-              rowsPerPageOptions={[20]}
-              sx={{
-                '& .MuiDataGrid-row': { cursor: 'pointer' },
-                "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
-                  outline: "none"
-                }
-              }}
-            // rowCount={100}
-            />
-          </Box>
-        </Paper>
-      </Container>
-    </Fragment >
   )
 }
 

@@ -1,12 +1,12 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
+import { Box, Button, Container, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
 import { Stack } from '@mui/system';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo_ptit.png';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { registerAsync } from '../../store/reducers/authSlice';
 
-const base_URL = 'http://192.168.88.122:5000/api/v1/auth/register';
 
 const RegisterForm = () => {
 
@@ -20,13 +20,13 @@ const RegisterForm = () => {
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const a = 'a';
         // console.log(values);
         const user = {
             username: values.username,
@@ -36,34 +36,14 @@ const RegisterForm = () => {
             lastName: values.lastName,
         }
 
-
-        const addUser = async () => {
-            const res = await axios.post(base_URL, user);
-            return res;
-        }
-
         if (values.username !== '' && values.password !== '' && values.email !== '' && values.firstName !== '' && values.lastName !== '') {
-            addUser().then((res) => {
-                if (res.status === 200) {
-                    setValues({
-                        username: '',
-                        password: '',
-                        email: '',
-                        firstName: '',
-                        lastName: '',
-                        resMessage: '',
-                    });
-                    setShowPassword(false);
+            dispatch(registerAsync(user))
+                .then(() => {
                     navigate('/login');
-                }
-            }).catch((err) => {
-                console.log(err);
-                setValues({
-                    ...values,
-                    resMessage: err.response.data.resMessage,
-                });
-                setShowPassword(false);
-            })
+                })
+                .catch(() => {
+                    setValues({ ...values, resMessage: 'Register failed!' });
+                })
         }
     }
 
@@ -84,19 +64,20 @@ const RegisterForm = () => {
             px: { xs: 0, sm: 0 },
         }}>
             <Box component={Paper} sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Box component={"form"} onSubmit={handleSubmit} sx={{
-                    width: "100%", maxWidth: {
-                        xs: "100%",
-                        sm: "100%",
-                        md: "400px"
-                    }, py: {
-                        xs: 2,
-                        md: 4
-                    }, px: {
-                        xs: 2,
-                        md: 5
-                    }, backgroundColor: "#fff", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-                }}>
+                <Box component={"form"} onSubmit={handleSubmit} autoComplete="off" noValidate
+                    sx={{
+                        width: "100%", maxWidth: {
+                            xs: "100%",
+                            sm: "100%",
+                            md: "400px"
+                        }, py: {
+                            xs: 2,
+                            md: 4
+                        }, px: {
+                            xs: 2,
+                            md: 5
+                        }, backgroundColor: "#fff", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                    }}>
                     <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 1, mb: 2 }}>
                         <img src={logo} alt="logo" width="60px" />
                         <Typography variant="h5" component="h1" fontWeight="bold" gutterBottom>
@@ -132,7 +113,7 @@ const RegisterForm = () => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 }

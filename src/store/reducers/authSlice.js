@@ -1,51 +1,76 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { register, login } from '../services/authApi';
-
-const initialState = {
-    user: null,
-};
+import { register, login } from '../../services/authApi';
 
 export const registerAsync = createAsyncThunk('auth/register', register);
 export const loginAsync = createAsyncThunk('auth/login', login);
 
-export const authSlice = createSlice({
-    name: 'auth',
-    initialState,
+const authSlice = createSlice({
+    name: "auth",
+    initialState: {
+        user: null,
+        token: null,
+        isAuth: false,
+        isLoading: false,
+        error: null,
+    },
     reducers: {
-        logout: (state) => {
+        // logout
+        logout: (state, action) => {
             state.user = null;
-        }
+            state.token = null;
+            state.isAuth = false;
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        },
     },
     extraReducers: {
-        // register
-        [registerAsync.pending] : (state, action) => { // pending
-            console.log("pending")
-        },
-        [registerAsync.fulfilled] : (state, action) => { // fulfilled = success
-            console.log("fulfilled")
-            state.user = action.payload
-        },
-        [registerAsync.rejected] : (state, action) => { // rejected = error
-            console.log("rejected")
-        },
-
         // login
-        [loginAsync.pending] : (state, action) => { // pending
-            console.log("pending")
+        [loginAsync.pending]: (state, action) => {
+            console.log('pending');
+            state.isLoading = true;
         },
-        [loginAsync.fulfilled] : (state, action) => { // fulfilled = success
-            console.log("fulfilled")
-            state.user = action.payload
+        [loginAsync.fulfilled]: (state, action) => {
+            console.log('success');
+            console.log(action.payload);
+            state.isLoading = false;
+            const user = action.payload.data;
+            const {accessToken } = action.payload.data;
+            state.user = user;
+            state.token = accessToken;
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', JSON.stringify(accessToken));
+            state.isAuth = true;
         },
-        [loginAsync.rejected] : (state, action) => { // rejected = error
-            console.log("rejected")
+        [loginAsync.rejected]: (state, action) => {
+            console.log('error');
+            state.isLoading = false;
+            state.error = action.payload.resMessage;
         },
-    }
-});
 
-export const { logout } = authSlice.actions;
+        // register
+        [registerAsync.pending]: (state, action) => {
+            state.isLoading = true;
+        },
+        [registerAsync.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isLoading = false;
+            const user = action.payload.data;
+            const {accessToken } = action.payload.data;
+            state.user = user;
+            state.token = accessToken;
+            state.isAuth = true;
+        },
+        [registerAsync.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload.resMessage;
+        }
+    },
+})
 
-export const selectUser = (state) => state.auth.user;
+const authReducer = authSlice.reducer
 
-const authReducer = authSlice.reducer;
+export const { logout } = authSlice.actions
+
+export const authSelector = (state) => state.authReducer;
+
 export default authReducer;

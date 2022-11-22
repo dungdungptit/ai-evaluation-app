@@ -1,37 +1,59 @@
 import { Fragment, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react'
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Container, Typography, Paper, Box, TextField, Stack, backdropClasses, Button, FormControl, InputLabel, Select, MenuItem, ListSubheader, Menu, Breadcrumbs, Link } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Typography, Paper, Box, TextField, Button, MenuItem, Breadcrumbs, Link, ListSubheader, FormControl, InputLabel, Select } from '@mui/material';
 
-import { problems } from '../../data/problems';
-import { groups } from '../../data/group';
+import { problems } from '../../../data/problems';
+import { groups } from '../../../data/group';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewProblemAsync, getProblemByIdAsync, problemSelector, updateProblemAsync } from '../../../store/reducers/problemSlice';
+import { getAllGroupsAsync, getGroupByIdAsync, groupSelector, groupsSelector } from '../../../store/reducers/groupSlice';
+import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice';
 
-const ProblemItemNew = ({ state }) => {
+function makeItems(data) {
+    const items = [];
+    for (let group of data) {
+        items.push(<ListSubheader key={group.id}>{group.title}</ListSubheader>);
+        for (let subgroup of group.subgroups) {
+            items.push(<MenuItem key={subgroup.id} value={subgroup.id}>{subgroup.title}</MenuItem>);
+        }
+    }
+    return items;
+}
+
+const ProblemItemEdit = ({ state }) => {
     // state = "new" or "edit"
-    const location = useLocation();
-    const navigate = useNavigate();
-    const params = useParams();
-
-    console.log(state);
-
-    // if (state === "edit") {
-    const ProblemItem = problems.find((problem) => problem.id.toString() === params.id);
-    // console.log("param", ProblemItem);
-
     const [problem, setProblem] = React.useState(
-        state === "edit" ? ProblemItem : {
+        {
             title: '',
-            group: '',
-            subgroup: '',
             description: '',
             inputDescription: '',
             outputDescription: '',
+            subGroupId: '',
         }
     );
+
+    const navigate = useNavigate();
+    const params = useParams();
+    const problemId = params.id;
+
+    const dispatch = useDispatch();
+    const problemItem = useSelector(problemSelector);
+    const groups = useSelector(groupsSelector);
+    const subgroups = useSelector(subgroupsSelector);
+    console.log(problemItem);
+
+
+    useEffect(() => {
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllSubgroupsAsync());
+        dispatch(getProblemByIdAsync(problemId)).then((res) => {
+            setProblem(res.payload.data);
+        });
+    }, [dispatch, problemId])
 
 
     const handleChange = (event) => {
@@ -40,14 +62,21 @@ const ProblemItemNew = ({ state }) => {
             ...problem,
             [name]: event.target.value,
         });
-        console.log(problem);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("Submit");
-        console.log(problem);
-        // navigate('/admin/problems');
+        const newProblem = {
+            id: problemItem.id,
+            title: problem.title,
+            description: problem.description,
+            inputDescription: problem.inputDescription,
+            outputDescription: problem.outputDescription,
+            subGroupId: problem.subGroupId,
+        }
+        dispatch(updateProblemAsync(newProblem));
+        navigate('/admin/problems');
     };
 
     return (
@@ -69,7 +98,7 @@ const ProblemItemNew = ({ state }) => {
                             Problems
                         </Link>
                         <Typography color="text.primary">
-                            {state === "add" ? "New Problem" : "Edit Problem"}
+                            Edit Problem
                         </Typography>
                     </Breadcrumbs>
                 </Typography>
@@ -80,7 +109,7 @@ const ProblemItemNew = ({ state }) => {
                         id="outlined-basic"
                         label="Problem Name"
                         variant="outlined"
-                        defaultValue={problem.title}
+                        value={problem.title}
                         name="title"
                         onChange={handleChange}
                     />
@@ -91,7 +120,7 @@ const ProblemItemNew = ({ state }) => {
                         variant="outlined"
                         multiline
                         rows={4}
-                        defaultValue={problem.description}
+                        value={problem.description}
                         name="description"
                         onChange={handleChange}
                     />
@@ -102,7 +131,7 @@ const ProblemItemNew = ({ state }) => {
                         variant="outlined"
                         multiline
                         rows={4}
-                        defaultValue={problem.inputDescription}
+                        value={problem.inputDescription}
                         name="inputDescription"
                         onChange={handleChange}
                     />
@@ -113,49 +142,32 @@ const ProblemItemNew = ({ state }) => {
                         variant="outlined"
                         multiline
                         rows={4}
-                        defaultValue={problem.outputDescription}
+                        value={problem.outputDescription}
                         name="outputDescription"
                         onChange={handleChange}
                     />
-                    {/* group */}
-                    <TextField sx={{ m: 1, width: "100%" }}
-                        id="outlined-select-currency"
-                        select
-                        label="Group"
-                        value={problem.group}
-                        name="group"
-                        onChange={handleChange}
-                    >
-                        {groups.map((group) => (
-                            <MenuItem key={group.id} value={group.title}>
-                                {group.title}
-                            </MenuItem>
-                        ))}
-                    </TextField>
 
-                    {/* Subgroup */}
-                    <TextField sx={{ m: 1, width: "100%" }}
-                        id="outlined-select-currency"
-                        select
-                        label="Subgroup"
-                        value={problem.subgroup}
-                        name="subgroup"
-                        onChange={handleChange}
-                    >
-                        {problem.group === "" ? <MenuItem value="">Select Group First</MenuItem> :
-                            groups.find((group) => group.title === problem.group).subgroups.map((subgroup) => (
-                                <MenuItem key={subgroup.id} value={subgroup.title}>
-                                    {subgroup.title}
-                                </MenuItem>
-                            ))
-                        }
+                    {/* subgroup */}
+                    <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
+                        <InputLabel id="demo-simple-select-outlined-label">Subgroup</InputLabel>
 
-                    </TextField>
+                        <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={problem.subGroupId}
+                            label="Subgroup"
+                            name="subGroupId"
+                            onChange={handleChange}
+                        >
+                            {makeItems(groups)}
+                        </Select>
+
+                    </FormControl>
+
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
                         <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
                         <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
-                        {/* <Button variant="contained" sx={{ ml: 2 }} onClick={() => navigate('/admin/problems')}>Back</Button> */}
                     </Box>
                 </Paper>
                 {/* end form */}
@@ -164,10 +176,10 @@ const ProblemItemNew = ({ state }) => {
     )
 }
 
-ProblemItemNew.propTypes = {
+ProblemItemEdit.propTypes = {
     ProblemItem: PropTypes.object,
     rơwsData: PropTypes.array,
 };
 
-export default ProblemItemNew
+export default ProblemItemEdit
 

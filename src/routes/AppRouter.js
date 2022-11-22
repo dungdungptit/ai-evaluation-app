@@ -11,11 +11,11 @@ import Login from "../pages/Login";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './ProtectedRoutes';
 import PublicRoutes from './PublicRoutes';
-import Users from '../pages/admin/Users';
-import ProblemItemNew from '../pages/admin/ProblemItemNew';
-import AdminProblems from '../pages/admin/AdminProblems';
-import AdminProblemItem from '../pages/admin/AdminProblemItem';
+import { Users, UserItem, UserEdit, UserNew } from '../pages/admin/user';
+import { ProblemItemNew, AdminProblems, AdminProblemItem, ProblemItemEdit } from '../pages/admin/problem';
 import Register from '../pages/Register';
+import { Groups } from '../pages/admin/group';
+import Subgroups from '../pages/admin/subgroup/Subgroups';
 
 const AppRouter = () => {
 
@@ -29,6 +29,7 @@ const AppRouter = () => {
     }
 
     const auth = useAuth();
+    console.log(auth);
 
     return (
         <Routes>
@@ -37,10 +38,18 @@ const AppRouter = () => {
                     <Route index element={!!auth && auth.role.includes('admin') ? <AdminProblems /> : <Problems />} />
                     {!!auth && auth.role.includes('admin') && <Route path="admin" element={<AdminProblems />} />}
                     {!!auth && auth.role.includes('admin') && <Route path="admin/problems" element={<AdminProblems />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/users" element={<Users />} />}
                     {!!auth && auth.role.includes('admin') && <Route path="admin/problems/:id" element={<AdminProblemItem />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/add" element={<ProblemItemNew state={"add"} />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/edit/:id" element={<ProblemItemNew state={"edit"} />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/add" element={<ProblemItemNew />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/edit/:id" element={<ProblemItemEdit />} />}
+
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/users" element={<Users />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/:id" element={<UserItem />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/add" element={<UserNew />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/edit/:id" element={<UserEdit />} />}
+
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/group" element={<Groups />} />}
+
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup" element={<Subgroups />} />}
 
                     <Route path="problems" element={<Problems />} />
                     <Route path="problems/:id" element={<ProblemItem />} />

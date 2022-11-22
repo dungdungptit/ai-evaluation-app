@@ -10,6 +10,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import { problems } from '../../data/problems';
 import { history } from "../../data/historys";
 import jupyter_img from "../../assets/images/1200px-Jupyter_logo.svg.png"
+import { useDispatch, useSelector } from 'react-redux';
+import { getProblemByIdAsync, problemSelector } from '../../store/reducers/problemSlice';
+import { BoxProblems, BoxTitle } from '../../components/Box/BoxContainer';
+import { token } from '../../utils/constants';
+import axios from 'axios';
 
 const columns = [
   { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'ID', minWidth: 50, sortable: false, },
@@ -26,147 +31,120 @@ const ProblemItem = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
-  // console.log(location);
+  console.log(params)
+  const problemId = params.id;
 
-  // const ProblemItem = location.state;
-  // console.log(ProblemItem);
-
-  const ProblemItem = problems.find((problem) => problem.id.toString() === params.id);
-  console.log("param", ProblemItem);
-  const rowsData = history.filter((history) => history.problemId === ProblemItem.id);
-
-  const pageSize = rowsData.length;
+  const dispatch = useDispatch();
+  const problemItem = useSelector(problemSelector);
 
   useEffect(() => {
-    if (!ProblemItem) {
-      navigate('/problems');
+    dispatch(getProblemByIdAsync(problemId));
+  }, [dispatch])
+  const rowsData = history.filter((history) => history.problemId === 1);
+
+  const pageSize = rowsData.length;
+  const postData = {
+    username: "server01"
+  }
+  const handleEvalute = (e) => {
+    e.preventDefault();
+    const postDataAsync = async () => {
+      const response = await axios.post("http://192.168.88.122:5000/api/v1/hub/evaluate", JSON.stringify(postData),
+        {
+          headers:
+          {
+            token: token,
+            'Content-Type': 'application/json'
+          }
+        })
+      console.log(response)
+      return response.data;
     }
-  }, [ProblemItem, navigate]);
+    postDataAsync();
+  }
 
   return (
-    <Fragment>
-        <Paper sx={{
-          height: 'auto',
-          minWidth: { xs: 300, sm: 600, md: 900 }, py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 },
-          backgroundColor: '#f2f2f2'
-        }} >
-          {ProblemItem && (
-            <Fragment>
-              <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom>
-                {ProblemItem.title}
-              </Typography>
+    <BoxProblems>
+      {problemItem && (
+        <Fragment>
+          <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom sx={{ mt: 3 }}>
+            {problemItem.title}
+          </Typography>
 
-              <Paper sx={{ display: 'flex', flexDirection: 'column', height: 'auto', py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 } }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                  <Box fontWeight="fontWeightBold" mb={1}>
-                    Description :
-                  </Box>
-                  {ProblemItem.description}
-                </Typography>
-                <Typography variant="h6" component="h2" gutterBottom>
-                  <Box fontWeight="fontWeightBold" mb={1}>
-                    Input :
-                  </Box>
-                  {ProblemItem.inputDescription}
-                </Typography>
-                <Typography variant="h6" component="h2" gutterBottom>
-                  <Box fontWeight="fontWeightBold" mb={1}>
-                    Output :
-                  </Box>
-                  {ProblemItem.outputDescription}
-                </Typography>
-                {/* button blank to jupyterhub */}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 2 }}>
-                  <Button
-                    sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
-                    color="primary"
-                    aria-label="upload picture"
-                    component="a"
-                    startIcon={<img src={jupyter_img} alt="jupyter" width="32px" />}
-                    variant="contained"
-                    href="http://localhost:8888/lab"
-                    target="_blank"
-                  >
-                      Setup Environment
-                  </Button>
-                </Box>
-              </Paper>
-
-
-              <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom marginTop={4}>
-                History :
-              </Typography>
-              <Paper sx={{
-                height: {
-                  xs: 108 + 6 * 16 + 52 + (pageSize * 52) + 'px',
-                  md: 108 + 3 * 16 + 52 + (pageSize * 52) + 'px'
-                },
-                minWidth: { xs: 300, sm: 600, md: 900 }, py: { xs: 2, md: 4 }, px: { xs: 0, md: 5 }
-              }} >
-                <Box
-                  sx={{
-                    height: 300,
-                    width: '100%',
-                    '& .super-app-theme--header': {
-                      backgroundColor: '#ececec',
-                    },
-                    '& .css-1jbbcbn-MuiDataGrid-columnHeaderTitle': {
-                      fontWeight: '600',
-                    }
-                  }}
-                >
-                  <Stack direction='row'
-                    sx={{
-                      py: { xs: 1, md: 3 },
-                      pt: { xs: 3, md: 1 },
-                      px: { xs: 0, sm: 4, md: 0, lg: 0 },
-                      justifyContent: {
-                        xs: "center",
-                        sm: "space-between",
-                        md: "space-between",
-                        lg: "space-between",
-                      },
-                      alignItems: {
-                        xs: "space-between",
-                        sm: "center",
-                        md: "center",
-                        lg: "center",
-                      },
-                      flexDirection: {
-                        xs: "column",
-                        sm: "row",
-                        md: "row",
-                        lg: "row",
-                      },
-                    }}>
-                    <Typography variant="h4">History</Typography>
-                  </Stack>
+          <Box sx={{ px: 2 }}>
+            <Typography variant="h6" component="h2" gutterBottom>
+              <Box fontWeight="fontWeightBold" mb={1}>
+                Description :
+              </Box>
+              {problemItem.description}
+            </Typography>
+            <Typography variant="h6" component="h2" gutterBottom>
+              <Box fontWeight="fontWeightBold" mb={1}>
+                Input :
+              </Box>
+              {problemItem.inputDescription}
+            </Typography>
+            <Typography variant="h6" component="h2" gutterBottom>
+              <Box fontWeight="fontWeightBold" mb={1}>
+                Output :
+              </Box>
+              {problemItem.outputDescription}
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} component="form" onSubmit={handleEvalute}>
+              <Button
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                Evaluate
+              </Button>
+            </Box>
+            {/* button blank to jupyterhub */}
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 2 }}>
+              <Button
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
+                color="primary"
+                aria-label="upload picture"
+                component="a"
+                startIcon={<img src={jupyter_img} alt="jupyter" width="32px" />}
+                variant="contained"
+                href={`https://hub.zcode.vn/hub/login?username=server01&token=123456`}
+                target="_blank"
+              >
+                Setup Environment
+              </Button>
+            </Box>
+          </Box>
 
 
-                  <DataGrid
-                    rows={rowsData}
-                    columns={columns}
-                    disableSelectionOnClick
-                    disableColumnMenu
-                    disableColumnSelector
-                    hideFooter
-                    autoHeight
-                    pageSize={pageSize}
-                    rowsPerPageOptions={[20]}
-                    sx={{
-                      '& .MuiDataGrid-row': { cursor: 'pointer' },
-                      "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
-                        outline: "none"
-                      }
-                    }}
-                  // rowCount={100}
-                  />
-                </Box>
-              </Paper>
-            </Fragment>
-          )}
-        </Paper>
-    </Fragment >
+
+          <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom marginTop={4}>
+            History :
+          </Typography>
+          <BoxTitle>
+            <DataGrid
+              rows={rowsData}
+              columns={columns}
+              disableSelectionOnClick
+              disableColumnMenu
+              disableColumnSelector
+              hideFooter
+              autoHeight
+              pageSize={pageSize}
+              rowsPerPageOptions={[20]}
+              sx={{
+                '& .MuiDataGrid-row': { cursor: 'pointer' },
+                "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+                  outline: "none"
+                }
+              }}
+            // rowCount={100}
+            />
+          </BoxTitle>
+        </Fragment>
+      )}
+    </BoxProblems >
   )
 }
 

@@ -4,12 +4,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Container, Typography, Paper, Box, TextField, IconButton, Stack, backdropClasses, Button, Breadcrumbs, Link } from '@mui/material';
+import {  Typography, Paper, Box, TextField, IconButton, Stack, Button, Breadcrumbs, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { problems } from '../../data/problems';
-import { history } from "../../data/historys";
+import { problems } from '../../../data/problems';
+import { history } from "../../../data/historys";
+import { getProblemByIdAsync, problemSelector } from '../../../store/reducers/problemSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -28,22 +30,18 @@ const AdminProblemItem = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
-    // console.log(location);
+    console.log(params)
+    const problemId = params.id;
 
-    // const ProblemItem = location.state;
-    // console.log(ProblemItem);
-
-    const ProblemItem = problems.find((problem) => problem.id.toString() === params.id);
-    console.log("param", ProblemItem);
-    const rowsData = history.filter((history) => history.problemId === ProblemItem.id);
-
-    const pageSize = rowsData.length;
+    const dispatch = useDispatch();
+    const problemItem = useSelector(problemSelector);
 
     useEffect(() => {
-        if (!ProblemItem) {
-            navigate('/admin/problems');
-        }
-    }, [ProblemItem, navigate]);
+        dispatch(getProblemByIdAsync(problemId));
+    }, [dispatch])
+    const rowsData = history.filter((history) => history.problemId === 1);
+
+    const pageSize = rowsData.length;
 
     return (
         <Fragment>
@@ -52,7 +50,7 @@ const AdminProblemItem = () => {
                 minWidth: { xs: 300, sm: 600, md: 900 }, px: { xs: 0, md: 3 },
                 flexGrow: 1,
             }} >
-                {ProblemItem && (
+                {problemItem && (
                     <Fragment>
                         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2, pt: 2 }}>
 
@@ -65,7 +63,7 @@ const AdminProblemItem = () => {
                                     <Link underline="hover" color="inherit" href="/admin/problems">
                                         Problems
                                     </Link>
-                                    <Typography color="text.primary">{ProblemItem.title}</Typography>
+                                    <Typography color="text.primary">{problemItem.title}</Typography>
                                 </Breadcrumbs>
                             </Typography>
 
@@ -75,7 +73,7 @@ const AdminProblemItem = () => {
                                 aria-label="edit"
                                 color="primary"
                                 startIcon={<EditIcon />}
-                                onClick={() => navigate(`/admin/problems/edit/${ProblemItem.id}`, { state: ProblemItem })}
+                                onClick={() => navigate(`/admin/problems/edit/${problemItem.id}`, { state: problemItem })}
                             >
                                 Edit
                             </Button>
@@ -87,19 +85,19 @@ const AdminProblemItem = () => {
                                 <Box fontWeight="fontWeightBold" mb={1}>
                                     Description :
                                 </Box>
-                                {ProblemItem.description}
+                                {problemItem.description}
                             </Typography>
                             <Typography variant="h6" component="h2" gutterBottom>
                                 <Box fontWeight="fontWeightBold" mb={1}>
                                     Input :
                                 </Box>
-                                {ProblemItem.inputDescription}
+                                {problemItem.inputDescription}
                             </Typography>
                             <Typography variant="h6" component="h2" gutterBottom>
                                 <Box fontWeight="fontWeightBold" mb={1}>
                                     Output :
                                 </Box>
-                                {ProblemItem.outputDescription}
+                                {problemItem.outputDescription}
                             </Typography>
                         </Paper>
 
@@ -182,7 +180,7 @@ const AdminProblemItem = () => {
 }
 
 AdminProblemItem.propTypes = {
-    ProblemItem: PropTypes.object,
+    problemItem: PropTypes.object,
     rơwsData: PropTypes.array,
 };
 

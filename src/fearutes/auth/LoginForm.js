@@ -1,15 +1,16 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, styled, Typography } from '@mui/material'
 import { Stack } from '@mui/system';
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo_ptit.png';
-import axios from 'axios';
-import { base_URL } from '../../utils/constants';
-
-const api = '/api/v1/auth/login';
+import { authSelector, loginAsync } from '../../store/reducers/authSlice';
 
 const LoginForm = () => {
+
+  const dispatch = useDispatch();
+  const auth = useSelector(authSelector);
 
   const [values, setValues] = useState({
     username: '',
@@ -19,40 +20,19 @@ const LoginForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { username, password } = values;
-    const userRes = async () => {
-      const response = await axios.post(base_URL + api, {
-        username,
-        password
-      });
-      return response;
-    }
-
-    userRes().then((res) => {
-      console.log(res);
-      if (res.status === 200) {
-        localStorage.setItem('user', JSON.stringify(res.data.data));
-        if (res.data.data.role.includes('admin')) {
-          navigate('/admin/problems');
-        } else if (res.data.data.role.includes('superadmin')) {
-          navigate('/admin/problems');
-        }
-        else if (res.data.data.role.includes('user')) {
-          navigate('/problems');
-        }
-      }
-    }).catch((err) => {
-      // console.log(err);
-      setValues({ ...values, resMessage: err.response.data.resMessage });
-      console.log(values.resMessage);
-
-    })
+    dispatch(loginAsync({ username, password }))
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {
+        setValues({ ...values, resMessage: 'Login failed!' });
+        console.log(auth);
+      })
   }
+
 
   const handleChange = (prop) => (e) => {
     setValues({ ...values, [prop]: e.target.value });
@@ -71,19 +51,25 @@ const LoginForm = () => {
       px: { xs: 0, sm: 0 },
     }}>
       <Box component={Paper} sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Box component={"form"} onSubmit={handleSubmit} sx={{
-          width: "100%", maxWidth: {
-            xs: "100%",
-            sm: "100%",
-            md: "400px"
-          }, py: {
-            xs: 2,
-            md: 4
-          }, px: {
-            xs: 2,
-            md: 5
-          }, backgroundColor: "#fff", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-        }}>
+        <Box component={"form"} onSubmit={handleSubmit} autoComplete="off" noValidate
+          sx={{
+            width: "100%",
+            maxWidth: {
+              xs: "100%",
+              sm: "100%",
+              md: "400px"
+            },
+            py: {
+              xs: 2,
+              md: 4
+            },
+            px: {
+              xs: 2,
+              md: 5
+            },
+            backgroundColor: "#fff", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 1, mb: 2 }}>
             <img src={logo} alt="logo" width="60px" />
             <Typography variant="h5" component="h1" fontWeight="bold" gutterBottom>
@@ -102,7 +88,7 @@ const LoginForm = () => {
               </InputLabel>
               <OutlinedInput
                 id="input-with-icon-adornment"
-                value={values.username}
+                defaultValue={values.username}
                 onChange={handleChange('username')}
                 label="Username"
               />
@@ -114,7 +100,7 @@ const LoginForm = () => {
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? 'text' : 'password'}
-                value={values.password}
+                defaultValue={values.password}
                 onChange={handleChange('password')}
                 endAdornment={
                   <InputAdornment position="end">
@@ -124,7 +110,7 @@ const LoginForm = () => {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -142,7 +128,7 @@ const LoginForm = () => {
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
               Forgot password? <Link href="/forgot-password">Reset</Link>
-             
+
             </Box>
           </Stack>
         </Box>

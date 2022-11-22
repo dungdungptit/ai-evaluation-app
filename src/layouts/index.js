@@ -22,6 +22,7 @@ const MainStyle = styled('div')(({ theme }) => ({
     minHeight: '100%',
     paddingTop: APP_BAR_MOBILE + 24,
     paddingBottom: theme.spacing(10),
+    backgroundColor: "#f6f9fc",
     [theme.breakpoints.up('lg')]: {
         paddingTop: APP_BAR_DESKTOP + 24,
         paddingLeft: theme.spacing(2),
@@ -33,6 +34,7 @@ const AdminMainStyle = styled('div')(({ theme }) => ({
     flexGrow: 1,
     overflow: 'auto',
     minHeight: '100%',
+    display: 'flex',
     // paddingTop: APP_BAR_MOBILE + 24,
     paddingBottom: theme.spacing(10),
     [theme.breakpoints.up('lg')]: {
@@ -58,9 +60,7 @@ const Layout = () => {
             {!!user && user.role.includes('admin') ? <AdminNavbar /> : <Navbar />}
             {(!!user && user.role.includes('admin'))
                 ?
-                <AdminMainStyle sx={{
-                    display: 'flex',
-                }}>
+                <AdminMainStyle>
                     <AdminSidebar />
                     <Outlet />
                 </AdminMainStyle>
