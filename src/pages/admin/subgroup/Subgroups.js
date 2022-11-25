@@ -17,6 +17,7 @@ import {
 import DataTable from '../../../components/DataTable/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice.js';
+import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice';
 
 
 // const rowsData = subgroups;
@@ -24,8 +25,10 @@ import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers
 const Subgroups = () => {
     const dispatch = useDispatch();
     const subgroups = useSelector(subgroupsSelector);
+    const groups = useSelector(groupsSelector);
 
     useEffect(() => {
+        dispatch(getAllGroupsAsync());
         dispatch(getAllSubgroupsAsync());
     }, [dispatch]);
 
@@ -39,7 +42,7 @@ const Subgroups = () => {
         console.log(param);
         console.log(event);
         console.log(location.pathname);
-        navigate(`/admin/subgroups/${param.row.id}`, { state: param.row });
+        navigate(`/admin/subgroup/${param.row.id}`, { state: param.row });
 
     };
 
@@ -60,7 +63,12 @@ const Subgroups = () => {
             ),
         },
         { field: 'description', headerClassName: 'super-app-theme--header', headerName: 'Description', minWidth: 200, flex: 1, sortable: false, },
-        { field: 'groupId', headerClassName: 'super-app-theme--header', headerName: 'Group Id', minWidth: 200, flex: 1, sortable: false, },
+        {
+            field: 'groupId', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false,
+            renderCell: (params) => (
+                `${groups.find(group => group.id === params.value).title}`
+            )
+        },
         {
             field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 200, sortable: false,
             renderCell: (params) => {
@@ -71,7 +79,7 @@ const Subgroups = () => {
 
                 const onEdit = (e) => {
                     const currentRow = params.row;
-                    navigate(`/admin/subgroups/edit/${params.row.id}`, { state: params.row });
+                    navigate(`/admin/subgroup/edit/${params.row.id}`, { state: params.row });
                 };
 
                 const onDelete = (e) => {
@@ -108,11 +116,11 @@ const Subgroups = () => {
                         </Typography>
 
                         {/* Add custom button to the toolbar */}
-                        {/* a link to /subgroups/Add */}
+                        {/* a link to /subgroup/Add */}
                         <Button
                             variant="contained"
                             startIcon={<AddIcon />}
-                            onClick={() => navigate('/admin/subgroups/add')}
+                            onClick={() => navigate('/admin/subgroup/add')}
                         >
                             Add Subgroup
                         </Button>

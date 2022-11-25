@@ -1,13 +1,9 @@
 // @mui
-import { Typography, Box, Stack, Button, Breadcrumbs, Link } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Fragment, useEffect, useState } from 'react';
+import { Typography, Stack, Button, Breadcrumbs, Link } from '@mui/material';
+import { Fragment, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
 import { useLocation, useNavigate } from "react-router-dom";
-
-// import data
-// import { groups } from '../../data/groups';
 
 import {
     BoxContainer,
@@ -16,10 +12,8 @@ import {
 } from '../../../components/Box/BoxContainer';
 import DataTable from '../../../components/DataTable/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice.js';
+import { deleteGroupAsync, getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice.js';
 
-
-// const rowsData = groups;
 
 const Groups = () => {
     const dispatch = useDispatch();
@@ -39,7 +33,7 @@ const Groups = () => {
         console.log(param);
         console.log(event);
         console.log(location.pathname);
-        navigate(`/admin/groups/${param.row.id}`, { state: param.row });
+        navigate(`/admin/group/${param.row.id}`, { state: param.row });
 
     };
 
@@ -70,12 +64,13 @@ const Groups = () => {
 
                 const onEdit = (e) => {
                     const currentRow = params.row;
-                    navigate(`/admin/groups/edit/${params.row.id}`, { state: params.row });
+                    navigate(`/admin/group/edit/${params.row.id}`, { state: params.row });
                 };
 
                 const onDelete = (e) => {
-                    const currentRow = params.row;
-                    return alert(JSON.stringify(currentRow, null, 4));
+                    const groupId = params.row.id;
+                    dispatch(deleteGroupAsync(groupId));
+                    window.location.reload();
                 };
 
                 return (
@@ -107,11 +102,11 @@ const Groups = () => {
                         </Typography>
 
                         {/* Add custom button to the toolbar */}
-                        {/* a link to /groups/Add */}
+                        {/* a link to /group/Add */}
                         <Button
                             variant="contained"
                             startIcon={<AddIcon />}
-                            onClick={() => navigate('/admin/groups/add')}
+                            onClick={() => navigate('/admin/group/add')}
                         >
                             Add Group
                         </Button>

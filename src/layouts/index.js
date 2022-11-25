@@ -19,7 +19,7 @@ const RootStyle = styled('div')({
 const MainStyle = styled('div')(({ theme }) => ({
     flexGrow: 1,
     overflow: 'auto',
-    minHeight: '100%',
+    minHeight: '100vh',
     paddingTop: APP_BAR_MOBILE + 24,
     paddingBottom: theme.spacing(10),
     backgroundColor: "#f6f9fc",
@@ -33,7 +33,7 @@ const MainStyle = styled('div')(({ theme }) => ({
 const AdminMainStyle = styled('div')(({ theme }) => ({
     flexGrow: 1,
     overflow: 'auto',
-    minHeight: '100%',
+    minHeight: '100vh',
     display: 'flex',
     // paddingTop: APP_BAR_MOBILE + 24,
     paddingBottom: theme.spacing(10),
@@ -51,6 +51,13 @@ const AdminMainStyle = styled('div')(({ theme }) => ({
     }
 }));
 
+const AdminMainContainer = styled('div')(({ theme }) => ({
+    flexGrow: 1,
+    overflow: 'auto',
+    minHeight: '100%',
+    display: 'flex',
+}));
+
 const Layout = () => {
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -60,10 +67,12 @@ const Layout = () => {
             {!!user && user.role.includes('admin') ? <AdminNavbar /> : <Navbar />}
             {(!!user && user.role.includes('admin'))
                 ?
-                <AdminMainStyle>
+                <AdminMainContainer>
                     <AdminSidebar />
-                    <Outlet />
-                </AdminMainStyle>
+                    <AdminMainStyle>
+                        <Outlet />
+                    </AdminMainStyle>
+                </AdminMainContainer>
                 :
                 <MainStyle>
                     <Outlet />

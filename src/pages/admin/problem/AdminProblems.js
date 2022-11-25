@@ -1,5 +1,5 @@
 // @mui
-import { Typography, Stack, Button, Breadcrumbs, Link } from '@mui/material';
+import { Typography, Stack, Button, Breadcrumbs, Link, Box } from '@mui/material';
 import { useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -13,6 +13,7 @@ import {
 import DataTable from '../../../components/DataTable/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProblemsAsync, problemsSelector, deleteProblemAsync } from '../../../store/reducers/problemSlice';
+
 
 
 const Problems = () => {

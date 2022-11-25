@@ -10,6 +10,7 @@ export const BoxContainer = (props) => (
             maxWidth: 1200,
             width: '100%',
             margin: '0 auto',
+            minHeight: '100vh',
         }}
     >
         {props.children}
@@ -20,6 +21,7 @@ export const BoxProblems = (props) => (
     <Box
         sx={{
             height: 'auto',
+            minHeight: 'calc(100vh - 220px)',
             py: 2,
             px: 4,
             maxWidth: 1200,

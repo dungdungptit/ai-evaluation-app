@@ -4,7 +4,7 @@ import Problems from '../pages/Problems';
 import History from '../pages/History';
 import Guide from '../pages/Guide';
 import Contact from '../pages/Contact';
-import ProblemItem from '../fearutes/problems/ProblemItem';
+import ProblemItem from '../pages/ProblemItem';
 import Page404 from "../pages/Page404";
 import Login from "../pages/Login";
 
@@ -14,8 +14,10 @@ import PublicRoutes from './PublicRoutes';
 import { Users, UserItem, UserEdit, UserNew } from '../pages/admin/user';
 import { ProblemItemNew, AdminProblems, AdminProblemItem, ProblemItemEdit } from '../pages/admin/problem';
 import Register from '../pages/Register';
-import { Groups } from '../pages/admin/group';
+import { GroupEdit, GroupItem, GroupNew, Groups } from '../pages/admin/group';
 import Subgroups from '../pages/admin/subgroup/Subgroups';
+import { SubgroupEdit, SubgroupItem, SubgroupNew } from '../pages/admin/subgroup';
+import { Submissions } from '../pages/admin/submission';
 
 const AppRouter = () => {
 
@@ -48,8 +50,16 @@ const AppRouter = () => {
                     {!!auth && auth.role.includes('admin') && <Route path="admin/users/edit/:id" element={<UserEdit />} />}
 
                     {!!auth && auth.role.includes('admin') && <Route path="admin/group" element={<Groups />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/:id" element={<GroupItem />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/add" element={<GroupNew />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/edit/:id" element={<GroupEdit />} />}
 
                     {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup" element={<Subgroups />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/:id" element={<SubgroupItem />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/add" element={<SubgroupNew />} />}
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/edit/:id" element={<SubgroupEdit />} />}
+
+                    {!!auth && auth.role.includes('admin') && <Route path="admin/submission" element={<Submissions />} />}
 
                     <Route path="problems" element={<Problems />} />
                     <Route path="problems/:id" element={<ProblemItem />} />

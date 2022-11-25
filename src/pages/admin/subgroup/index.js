@@ -1,4 +1,4 @@
 export { default as Subgroups } from './Subgroups';
-// export { default as UserEdit } from './UserEdit';
-// export { default as UserNew } from './UserNew';
-// export { default as UserItem } from './UserItem';
+export { default as SubgroupEdit } from './SubgroupEdit';
+export { default as SubgroupNew } from './SubgroupNew';
+export { default as SubgroupItem } from './SubgroupItem';

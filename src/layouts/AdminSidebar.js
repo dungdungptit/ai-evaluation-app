@@ -79,16 +79,12 @@ const AdminSidebar = () => {
                 lg: 'relative' 
             },
             zIndex: open ? 402 : 1,
-            borderRight: {
-                xs: open ? '1px solid #e0e0e0' : 'none',
-                md: 'relative',
-                lg: "none",
-            },
+            borderRight: '1px solid #e0e0e0',
             backgroundColor: '#fff',
             minWidth: open ? 280 : 72,
             width: open ? { xs: 0, lg: 280 } : { xs: 0, lg: 72 },
             transition: 'all 0.3s linear',
-            height: "100vh",
+            minHeight: "100vh",
         }}>
             <SidebarBox p={2} sx={{p: open ? 2 : 1, py: 1, transition: 'all 0.3s linear', }} >
                 <Stack direction="row" spacing={0}

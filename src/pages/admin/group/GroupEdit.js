@@ -6,42 +6,40 @@ import PropTypes from 'prop-types'
 import { Typography, Paper, Box, TextField, Button, Breadcrumbs, Link } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserByIdAsync, userSelector, updateUserAsync } from '../../../store/reducers/userSlice';
+import { getGroupByIdAsync, groupSelector, updateGroupAsync } from '../../../store/reducers/groupSlice';
 import { BoxContainer } from '../../../components/Box/BoxContainer';
 
 
 
-const UserItemEdit = ({ state }) => {
+const GroupEdit = () => {
     // state = "new" or "edit"
-    const [user, setUser] = useState(
+    const [group, setGroup] = useState(
         {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
+          title: '',
+          description: '',
         }
     );
 
     const navigate = useNavigate();
     const params = useParams();
-    const userId = params.id;
+    const groupId = params.id;
 
     const dispatch = useDispatch();
-    const userItem = useSelector(userSelector);
-    console.log(userItem);
+    const groupItem = useSelector(groupSelector);
+    console.log(group);
 
 
     useEffect(() => {
-        dispatch(getUserByIdAsync(userId)).then((res) => {
-            setUser(res.payload.data);
+        dispatch(getGroupByIdAsync(groupId)).then((res) => {
+            setGroup(res.payload.data);
         });
-    }, [dispatch, userId])
+    }, [dispatch, groupId])
 
 
     const handleChange = (event) => {
         const name = event.target.name;
-        setUser({
-            ...user,
+        setGroup({
+            ...group,
             [name]: event.target.value,
         });
     };
@@ -49,15 +47,13 @@ const UserItemEdit = ({ state }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("Submit");
-        const newUser = {
-            id: userId,
-            email: user.email,
-            password: user.password,
-            firstName: user.firstName,
-            lastName: user.lastName,
+        const newGroup = {
+          id: groupItem.id,
+          title: group.title,
+          description: group.description,
         }
-        dispatch(updateUserAsync(newUser));
-        navigate('/admin/users');
+        dispatch(updateGroupAsync(newGroup));
+        navigate('/admin/group');
     };
 
     return (
@@ -66,16 +62,16 @@ const UserItemEdit = ({ state }) => {
             <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom
                 sx={{ mt: 2, mb: 3, }}
             >
-                Users Details
+                Groups Details
                 <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
                     <Link underline="hover" color="inherit" href="">
                         Home
                     </Link>
-                    <Link underline="hover" color="inherit" href="/admin/users">
-                        Users
+                    <Link underline="hover" color="inherit" href="/admin/groups">
+                        Groups
                     </Link>
                     <Typography color="text.primary">
-                        Edit User
+                        Edit Group
                     </Typography>
                 </Breadcrumbs>
             </Typography>
@@ -83,44 +79,29 @@ const UserItemEdit = ({ state }) => {
             <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, p: 3 }} component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <TextField
                     sx={{ width: '100%', mb: 2 }}
-                    id="email"
-                    label="Email"
+                    id="title"
+                    label="Title"
                     variant="outlined"
-                    value={user.email}
-                    name="email"
+                    value={group.title}
+                    name="title"
                     onChange={handleChange}
                 />
                 <TextField
                     sx={{ width: '100%', mb: 2 }}
-                    id="password"
-                    label="Password"
+                    id="description"
+                    label="Description"
                     variant="outlined"
-                    type="password"
-                    value={user.password}
-                    name="password"
+                    multiline
+                    rows={4}
+                    type="description"
+                    value={group.description}
+                    name="description"
                     onChange={handleChange}
                 />
-                <TextField
-                    sx={{ width: '100%', mb: 2 }}
-                    id="firstName"
-                    label="First Name"
-                    variant="outlined"
-                    value={user.firstName}
-                    name="firstName"
-                    onChange={handleChange}
-                />
-                <TextField
-                    sx={{ width: '100%', mb: 2 }}
-                    id="lastName"
-                    label="Last Name"
-                    variant="outlined"
-                    value={user.lastName}
-                    name="lastName"
-                    onChange={handleChange}
-                />
+                
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
-                    <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/users')}>Cancel</Button>
+                    <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/groups')}>Cancel</Button>
                     <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
                 </Box>
             </Paper>
@@ -130,10 +111,10 @@ const UserItemEdit = ({ state }) => {
     )
 }
 
-UserItemEdit.propTypes = {
-    UserItem: PropTypes.object,
+GroupEdit.propTypes = {
+    Group: PropTypes.object,
     rơwsData: PropTypes.array,
 };
 
-export default UserItemEdit
+export default GroupEdit
 

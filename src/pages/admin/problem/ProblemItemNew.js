@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewProblemAsync } from '../../../store/reducers/problemSlice';
 import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice';
 import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice';
+import { BoxContainer } from '../../../components/Box/BoxContainer';
 
 const ProblemItemNew = ({ state }) => {
     // state = "new" or "edit"
@@ -65,114 +66,108 @@ const ProblemItemNew = ({ state }) => {
     };
 
     return (
-        <Fragment>
-            <Box sx={{
-                height: "auto",
-                minWidth: { xs: 300, sm: 600, md: 900 }, px: { xs: 0, md: 3 },
-                flexGrow: 1,
-            }} >
-                <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom
-                    sx={{ mt: 2, mb: 3, }}
+        <BoxContainer>
+            <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom
+                sx={{ mt: 2, mb: 3, }}
+            >
+                Problems Details
+                <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
+                    <Link underline="hover" color="inherit" href="">
+                        Home
+                    </Link>
+                    <Link underline="hover" color="inherit" href="/admin/problems">
+                        Problems
+                    </Link>
+                    <Typography color="text.primary">
+                        "New Problem"
+                    </Typography>
+                </Breadcrumbs>
+            </Typography>
+            {/* form */}
+            <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, p: 3 }} component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Name"
+                    variant="outlined"
+                    value={problem.title}
+                    name="title"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Description"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.description}
+                    name="description"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Input"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.inputDescription}
+                    name="inputDescription"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Output"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.outputDescription}
+                    name="outputDescription"
+                    onChange={handleChange}
+                />
+                {/* group */}
+                <TextField sx={{ m: 1, width: "100%" }}
+                    id="outlined-select-currency"
+                    select
+                    label="Group"
+                    value={problem.groupId}
+                    name="groupId"
+                    onChange={handleChange}
                 >
-                    Problems Details
-                    <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
-                        <Link underline="hover" color="inherit" href="">
-                            Home
-                        </Link>
-                        <Link underline="hover" color="inherit" href="/admin/problems">
-                            Problems
-                        </Link>
-                        <Typography color="text.primary">
-                            "New Problem"
-                        </Typography>
-                    </Breadcrumbs>
-                </Typography>
-                {/* form */}
-                <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, p: 3 }} component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Name"
-                        variant="outlined"
-                        value={problem.title}
-                        name="title"
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Description"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.description}
-                        name="description"
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Input"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.inputDescription}
-                        name="inputDescription"
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Output"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.outputDescription}
-                        name="outputDescription"
-                        onChange={handleChange}
-                    />
-                    {/* group */}
-                    <TextField sx={{ m: 1, width: "100%" }}
-                        id="outlined-select-currency"
-                        select
-                        label="Group"
-                        value={problem.groupId}
-                        name="groupId"
-                        onChange={handleChange}
-                    >
-                        {groups.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.title}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                    {groups.map((option) => (
+                        <MenuItem key={option.id} value={option.id}>
+                            {option.title}
+                        </MenuItem>
+                    ))}
+                </TextField>
 
-                    {/* Subgroup */}
-                    <TextField sx={{ m: 1, width: "100%" }}
-                        id="outlined-select-currency"
-                        select
-                        label="Subgroup"
-                        value={problem.subGroupId}
-                        name="subGroupId"
-                        onChange={handleChange}
-                    >
-                        {subgroups.map((option) =>
-                            option.groupId === problem.groupId &&
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.title}
-                            </MenuItem>
-                        )}
+                {/* Subgroup */}
+                <TextField sx={{ m: 1, width: "100%" }}
+                    id="outlined-select-currency"
+                    select
+                    label="Subgroup"
+                    value={problem.subGroupId}
+                    name="subGroupId"
+                    onChange={handleChange}
+                >
+                    {subgroups.map((option) =>
+                        option.groupId === problem.groupId &&
+                        <MenuItem key={option.id} value={option.id}>
+                            {option.title}
+                        </MenuItem>
+                    )}
 
-                    </TextField>
+                </TextField>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
-                        <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
-                        <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
-                    </Box>
-                </Paper>
-                {/* end form */}
-            </Box>
-        </Fragment >
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
+                    <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
+                    <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
+                </Box>
+            </Paper>
+            {/* end form */}
+        </BoxContainer >
     )
 }
 

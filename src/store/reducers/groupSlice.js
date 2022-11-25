@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addNewGroup, getAllGroups, getGroupById, updateGroup } from "../../services/groupApi";
+import { addNewGroup, deleteGroup, getAllGroups, getGroupById, updateGroup } from "../../services/groupApi";
 
 // get all groups
 export const getAllGroupsAsync = createAsyncThunk("group/getAllGroups", getAllGroups);
@@ -12,6 +12,9 @@ export const addNewGroupAsync = createAsyncThunk("group/addNewGroup", addNewGrou
 
 // update group
 export const updateGroupAsync = createAsyncThunk("group/updateGroup", updateGroup);
+
+// delete group
+export const deleteGroupAsync = createAsyncThunk("group/deleteGroup", deleteGroup);
 
 const groupSlice = createSlice({
     name: "group",
@@ -76,6 +79,19 @@ const groupSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload.resMessage;
         },
+
+        // delete group
+        [deleteGroupAsync.pending]: (state, action) => {
+            state.isLoading = true;
+        },
+        [deleteGroupAsync.fulfilled]: (state, action) => {
+            console.log(action.payload);
+            state.isLoading = false;
+        },
+        [deleteGroupAsync.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload.resMessage;
+        }
     },
 });
 

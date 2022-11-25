@@ -4,6 +4,7 @@ import problemReducer from "./reducers/problemSlice";
 import groupReducer from "./reducers/groupSlice";
 import subgroupReducer from "./reducers/subgroupSlice";
 import userReducer from "./reducers/userSlice";
+import submissionReducer from "./reducers/submissionSlice";
 
 // store
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         groupReducer,
         subgroupReducer,
         userReducer,
+        submissionReducer,
     }
 })
 

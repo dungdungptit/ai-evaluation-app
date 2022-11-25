@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewProblemAsync, getProblemByIdAsync, problemSelector, updateProblemAsync } from '../../../store/reducers/problemSlice';
 import { getAllGroupsAsync, getGroupByIdAsync, groupSelector, groupsSelector } from '../../../store/reducers/groupSlice';
 import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice';
+import { BoxContainer } from '../../../components/Box/BoxContainer';
 
 function makeItems(data) {
     const items = [];
@@ -80,99 +81,94 @@ const ProblemItemEdit = ({ state }) => {
     };
 
     return (
-        <Fragment>
-            <Box sx={{
-                height: "auto",
-                minWidth: { xs: 300, sm: 600, md: 900 }, px: { xs: 0, md: 3 },
-                flexGrow: 1,
-            }} >
-                <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom
-                    sx={{ mt: 2, mb: 3, }}
-                >
-                    Problems Details
-                    <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
-                        <Link underline="hover" color="inherit" href="">
-                            Home
-                        </Link>
-                        <Link underline="hover" color="inherit" href="/admin/problems">
-                            Problems
-                        </Link>
-                        <Typography color="text.primary">
-                            Edit Problem
-                        </Typography>
-                    </Breadcrumbs>
-                </Typography>
-                {/* form */}
-                <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, p: 3 }} component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Name"
-                        variant="outlined"
-                        value={problem.title}
-                        name="title"
+        <BoxContainer>
+            <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom
+                sx={{ mt: 2, mb: 3, }}
+            >
+                Problems Details
+                <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
+                    <Link underline="hover" color="inherit" href="">
+                        Home
+                    </Link>
+                    <Link underline="hover" color="inherit" href="/admin/problems">
+                        Problems
+                    </Link>
+                    <Typography color="text.primary">
+                        Edit Problem
+                    </Typography>
+                </Breadcrumbs>
+            </Typography>
+            {/* form */}
+            <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, p: 3 }} component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Name"
+                    variant="outlined"
+                    value={problem.title}
+                    name="title"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Description"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.description}
+                    name="description"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Input"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.inputDescription}
+                    name="inputDescription"
+                    onChange={handleChange}
+                />
+                <TextField
+                    sx={{ width: '100%', mb: 2 }}
+                    id="outlined-basic"
+                    label="Problem Output"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    value={problem.outputDescription}
+                    name="outputDescription"
+                    onChange={handleChange}
+                />
+
+                {/* subgroup */}
+                <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
+                    <InputLabel id="demo-simple-select-outlined-label">Subgroup</InputLabel>
+
+                    <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={problem.subGroupId}
+                        label="Subgroup"
+                        name="subGroupId"
                         onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Description"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.description}
-                        name="description"
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Input"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.inputDescription}
-                        name="inputDescription"
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        sx={{ width: '100%', mb: 2 }}
-                        id="outlined-basic"
-                        label="Problem Output"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        value={problem.outputDescription}
-                        name="outputDescription"
-                        onChange={handleChange}
-                    />
+                    >
+                        {makeItems(groups)}
+                    </Select>
 
-                    {/* subgroup */}
-                    <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
-                        <InputLabel id="demo-simple-select-outlined-label">Subgroup</InputLabel>
-
-                        <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            value={problem.subGroupId}
-                            label="Subgroup"
-                            name="subGroupId"
-                            onChange={handleChange}
-                        >
-                            {makeItems(groups)}
-                        </Select>
-
-                    </FormControl>
+                </FormControl>
 
 
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
-                        <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
-                        <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
-                    </Box>
-                </Paper>
-                {/* end form */}
-            </Box>
-        </Fragment >
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
+                    <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
+                    <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
+                </Box>
+            </Paper>
+            {/* end form */}
+
+        </BoxContainer >
     )
 }
 

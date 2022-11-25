@@ -1,7 +1,7 @@
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, List } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Stack, AppBar, Toolbar, IconButton, Link } from '@mui/material';
+
 // Logo
 import logo from '../assets/images/logo_ptit.png';
 
