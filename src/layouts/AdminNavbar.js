@@ -6,13 +6,6 @@ import { Box, Stack, AppBar, Toolbar, IconButton, Link } from '@mui/material';
 import logo from '../assets/images/logo_ptit.png';
 
 // components
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-
-//
-import MenuIcon from '@mui/icons-material/Menu';
 import AccountPopover from './AccountPopover';
 // import NotificationsPopover from './NotificationsPopover';
 import { useState } from 'react';
@@ -23,12 +16,12 @@ const APPBAR_MOBILE = 64;
 const APPBAR_DESKTOP = 92;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
+    boxShadow: "0 1px 6px 0 rgb(32 33 36 / 28%)",
     backdropFilter: 'blur(6px)',
     position: 'static',
     color: 'white',
     WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-    // backgroundColor: alpha(theme.palette.background.default, 0.72),
+    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.72)' : 'rgba(0, 0, 0, 0.72)',
     [theme.breakpoints.up('lg')]: {
         width: "100%",
     },
@@ -41,11 +34,11 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
     minHeight: APPBAR_MOBILE,
     [theme.breakpoints.up('lg')]: {
         // minHeight: APPBAR_DESKTOP,
-        padding: theme.spacing(0, 5),
+        padding: theme.spacing(0, 2),
     },
     [theme.breakpoints.down('md')]: {
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingLeft: 16,
+        paddingRight: 16,
     },
 }));
 
@@ -110,47 +103,6 @@ const AdminNavbar = () => {
                 >
                     LOGO
                 </Typography> */}
-
-                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleOpenNavMenu}
-                        color="inherit"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorElNav}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
-                        }}
-                        open={Boolean(anchorElNav)}
-                        onClose={handleCloseNavMenu}
-                        sx={{
-                            display: { xs: 'block', md: 'none' },
-                        }}
-                    >
-                        {pages.map((page) => (
-                            <MenuItem
-                                key={page.name}
-                                component={Link}
-                                to={page.linkTo}
-                                onClick={handleCloseNavMenu}>
-                                <Typography textAlign="center">{page.name}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </Box>
 
                 <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: "center", my: "auto" }}>
                     <Box component={Link} to='admin/problems' sx={{

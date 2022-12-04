@@ -1,10 +1,11 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, styled, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, FormGroup, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, styled, Typography } from '@mui/material'
 import { Stack } from '@mui/system';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo_ptit.png';
+import { ButtonDefault } from '../../components/Button/ButtonDefault';
 import { authSelector, loginAsync } from '../../store/reducers/authSlice';
 
 const LoginForm = () => {
@@ -47,93 +48,102 @@ const LoginForm = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{
-      px: { xs: 0, sm: 0 },
+    <Box sx={{
+      height: '100vh',
+      width: '100vw',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     }}>
-      <Box component={Paper} sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Box component={"form"} onSubmit={handleSubmit} autoComplete="off" noValidate
-          sx={{
-            width: "100%",
-            maxWidth: {
-              xs: "100%",
-              sm: "100%",
-              md: "400px"
-            },
-            py: {
-              xs: 2,
-              md: 4
-            },
-            px: {
-              xs: 2,
-              md: 5
-            },
-            backgroundColor: "#fff", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-          }}
-        >
-          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 1, mb: 2 }}>
-            <img src={logo} alt="logo" width="60px" />
-            <Typography variant="h5" component="h1" fontWeight="bold" gutterBottom>
-              Login
-            </Typography>
-            {values.resMessage && (
-              <Typography variant="h6" component="h1" fontWeight='bold' gutterBottom >
-                {values.resMessage}
-              </Typography>
-            )}
-          </Box>
-          <Stack spacing={3}>
-            <FormControl variant="outlined">
-              <InputLabel htmlFor="input-with-icon-adornment">
-                Username
-              </InputLabel>
-              <OutlinedInput
-                id="input-with-icon-adornment"
-                defaultValue={values.username}
-                onChange={handleChange('username')}
-                label="Username"
-              />
-            </FormControl>
-            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? 'text' : 'password'}
-                defaultValue={values.password}
-                onChange={handleChange('password')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
-
-            <FormControlLabel control={<Checkbox sx={{ pl: 0 }} />} label="Remember me" />
-
-            <Button type='submit' variant="contained">Submit</Button>
-
-            {/* Don't have account, go to register and Forgot password */}
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              Don't have account? <Link href="/register">Register</Link>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              Forgot password? <Link href="/forgot-password">Reset</Link>
-
-            </Box>
-          </Stack>
+      <Stack spacing={3} component={"form"} onSubmit={handleSubmit} autoComplete="off" noValidate
+        sx={{
+          width: "100%",
+          maxWidth: {
+            xs: "100%",
+            sm: "100%",
+            md: "560px",
+          },
+          height: "auto",
+          boxSizing: 'border-box',
+          margin: "0 auto",
+          p: { xs: "48px 12px", md: "48px 64px", },
+          backgroundColor: "#fff",
+          borderRadius: 4,
+          // boxShadow: 2,
+          border: {
+            md: "1px solid #e0e0e0",
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 1, mb: 2 }}>
+          <img src={logo} alt="logo" width="60px" />
+          <Typography variant='h4' sx={{ fontWeight: 600, width: "100%", color: '#000', textAlign: 'center', fontSize: "1.5rem", mt: 2 }}>
+            Sign in to AI Evaluation
+          </Typography>
+          <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#000', textAlign: 'center', fontSize: "1rem" }}>
+            New user?
+            <Link href="/register" underline="hover" sx={{ color: '#000', fontWeight: 600, ml: 1 }}>
+              Create an account
+            </Link>
+          </Typography>
         </Box>
-      </Box>
-    </Container>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Username
+          </InputLabel>
+          <OutlinedInput
+            id="input-with-icon-adornment"
+            defaultValue={values.username}
+            onChange={handleChange('username')}
+            label="Username"
+          />
+        </FormControl>
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            defaultValue={values.password}
+            onChange={handleChange('password')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+
+        <FormGroup sx={{my: "8px !important"}}>
+          <FormControlLabel control={<Checkbox />} label="Remember me" />
+        </FormGroup>
+
+        {values.resMessage && (
+          <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#f44336', textAlign: 'center', fontSize: "1rem", m:"0px !important",  mb: "16px !important" }}>
+            {values.resMessage}
+          </Typography>
+        )}
+        <ButtonDefault type='submit' variant="contained">Submit</ButtonDefault>
+
+        {/* Don't have account, go to register and Forgot password */}
+        <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#000', textAlign: 'center', fontSize: "1rem" }}>
+          Forgot password?
+          <Link href="/forgot-password" underline="hover" sx={{ color: '#000', fontWeight: 600, ml: 1 }}>
+            Reset
+          </Link>
+        </Typography>
+      </Stack>
+
+    </Box>
   )
 }
 

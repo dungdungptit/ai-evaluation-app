@@ -23,12 +23,14 @@ const APPBAR_MOBILE = 64;
 const APPBAR_DESKTOP = 92;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
+    boxShadow: "0 1px 6px 0 rgb(32 33 36 / 28%)",
     backdropFilter: 'blur(6px)',
-    position: 'static',
+    position: 'fixed',
+    top: 0,
+    zIndex: 999,
     color: 'white',
     WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-    // backgroundColor: alpha(theme.palette.background.default, 0.72),
+    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.72)' : 'rgba(0, 0, 0, 0.72)',
     [theme.breakpoints.up('lg')]: {
         width: "100%",
     },
@@ -114,6 +116,7 @@ const Navbar = () => {
                         aria-haspopup="true"
                         onClick={handleOpenNavMenu}
                         color="inherit"
+                        sx={{ color: '#000' }}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -141,7 +144,7 @@ const Navbar = () => {
                                 component={Link}
                                 to={page.linkTo}
                                 onClick={handleCloseNavMenu}>
-                                <Typography textAlign="center">{page.name}</Typography>
+                                <Typography textAlign="center" color="#000" sx={{ fontWeight: 'bold', fontSize: 14 }}>{page.name}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
@@ -196,7 +199,7 @@ const Navbar = () => {
                             onClick={handleCloseNavMenu}
                             component={Link}
                             to={page.linkTo}
-                            sx={{ my: 0, color: 'inherit', display: 'block' }}
+                            sx={{ my: 0, color: '#000', display: 'block', fontWeight: 'bold', fontSize: 14 }}
                         >
                             {page.name}
                         </Button>
