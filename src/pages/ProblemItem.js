@@ -46,7 +46,13 @@ const ProblemItem = () => {
   const handleGetServer = (e) => {
     // e.preventDefault();
     if (getServer.username === '') {
-      dispatch(findServerAsync());
+      dispatch(findServerAsync()).then((res) => {
+        console.log(res);
+      });
+    }
+
+    if(getServer.username !== '') {
+      window.open(`https://hub.zcode.vn/hub/login?username=${getServer.username}&token=${getServer.token}`, '_blank');
     }
   }
 

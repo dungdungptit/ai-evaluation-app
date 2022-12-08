@@ -18,3 +18,6 @@ ENV NODE_ENV production
 EXPOSE 3000
 # Start the app
 CMD [ "npx", "serve", "build" ]
+
+# docker build -t getting-started .
+# docker run -dp 3000:3000 getting-started
