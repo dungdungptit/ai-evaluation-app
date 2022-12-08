@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  aievaluationapp:
+    image: aievaluationapp
+    build:
+      context: .
+      dockerfile: ./Dockerfile
