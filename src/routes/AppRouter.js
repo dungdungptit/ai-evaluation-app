@@ -30,6 +30,24 @@ const AppRouter = () => {
         }
     }
 
+    const isAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('admin');
+        } else {
+            return false
+        }
+    }
+
+    const isSuperAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('superadmin');
+        } else {
+            return false
+        }
+    }
+
     const auth = useAuth();
     console.log(auth);
 
@@ -37,29 +55,29 @@ const AppRouter = () => {
         <Routes>
             <Route element={<ProtectedRoutes />}>
                 <Route path="" element={<Layout />}>
-                    <Route index element={!!auth && auth.role.includes('admin') ? <AdminProblems /> : <Problems />} />
-                    {!!auth && auth.role.includes('admin') && <Route path="admin" element={<AdminProblems />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems" element={<AdminProblems />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/:id" element={<AdminProblemItem />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/add" element={<ProblemItemNew />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/problems/edit/:id" element={<ProblemItemEdit />} />}
+                    <Route index element={(isAdmin() || isSuperAdmin()) ? <AdminProblems /> : <Problems />} />
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin" element={<AdminProblems />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/problems" element={<AdminProblems />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/problems/:id" element={<AdminProblemItem />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/problems/add" element={<ProblemItemNew />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/problems/edit/:id" element={<ProblemItemEdit />} />}
 
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/users" element={<Users />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/:id" element={<UserItem />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/add" element={<UserNew />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/users/edit/:id" element={<UserEdit />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/users" element={<Users />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/:id" element={<UserItem />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/add" element={<UserNew />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/edit/:id" element={<UserEdit />} />}
 
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/group" element={<Groups />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/:id" element={<GroupItem />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/add" element={<GroupNew />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/group/edit/:id" element={<GroupEdit />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/group" element={<Groups />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/group/:id" element={<GroupItem />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/group/add" element={<GroupNew />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/group/edit/:id" element={<GroupEdit />} />}
 
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup" element={<Subgroups />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/:id" element={<SubgroupItem />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/add" element={<SubgroupNew />} />}
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/subgroup/edit/:id" element={<SubgroupEdit />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/subgroup" element={<Subgroups />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/subgroup/:id" element={<SubgroupItem />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/subgroup/add" element={<SubgroupNew />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/subgroup/edit/:id" element={<SubgroupEdit />} />}
 
-                    {!!auth && auth.role.includes('admin') && <Route path="admin/submission" element={<Submissions />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/submission" element={<Submissions />} />}
 
                     <Route path="problems" element={<Problems />} />
                     <Route path="problems/:id" element={<ProblemItem />} />

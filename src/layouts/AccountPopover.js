@@ -43,12 +43,22 @@ const AccountPopover = () => {
         navigate('/login');
     };
 
+    const useAuth = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return JSON.parse(user);
+        } else {
+            return null
+        }
+    }
+    const auth = useAuth();
+
     return (
         <Fragment>
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenAccountMenu} sx={{ p: 0 }}>
-                        <Avatar alt={account.name} src={account.photoURL} sx={{ width: 32, height: 32 }} />
+                        <Avatar alt={auth.username} src={auth.photoURL} sx={{ width: 32, height: 32 }} />
                     </IconButton>
                 </Tooltip>
                 <Menu
@@ -70,10 +80,10 @@ const AccountPopover = () => {
                 >
                     <Box sx={{ my: 1.5, px: 2 }}>
                         <Typography variant="subtitle1" noWrap sx={{ fontWeight: "bold" }}>
-                            {account.name}
+                            {auth.username}
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                            {account.email}
+                            {auth.email}
                         </Typography>
                     </Box>
 

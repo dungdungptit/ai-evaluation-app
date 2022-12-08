@@ -62,11 +62,28 @@ const AdminMainContainer = styled('div')(({ theme }) => ({
 const Layout = () => {
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const isAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('admin');
+        } else {
+            return false
+        }
+    }
+
+    const isSuperAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('superadmin');
+        } else {
+            return false
+        }
+    }
 
     return (
         <RootStyle>
-            {!!user && user.role.includes('admin') ? <AdminNavbar /> : <Navbar />}
-            {(!!user && user.role.includes('admin'))
+            {(isAdmin() || isSuperAdmin()) ? <AdminNavbar /> : <Navbar />}
+            {((isAdmin() || isSuperAdmin()))
                 ?
                 <AdminMainContainer>
                     <AdminSidebar />

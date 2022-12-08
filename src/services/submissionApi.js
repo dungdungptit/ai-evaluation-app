@@ -36,3 +36,11 @@ export const deleteSubmission = async (id) => {
     const response = await axios.delete(`${base_URL}/api/v1/submissions/delete/${id}`, { headers: { token } });
     return response.data;
 }
+
+// get submission by problem id and user id
+export const getSubmissionByProblemIdAndUserId = async (data) => {
+    const problemId = data.problemId;
+    const userId = data.userId;
+    const response = await axios.get(`${base_URL}/api/v1/submissions/problems/${problemId}/users/${userId}`, { headers: { token } });
+    return response.data;
+}

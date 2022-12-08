@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {addNewSubmission, getAllSubmissions, getSubmissionById, updateSubmission, deleteSubmission, getSubmissionByUserId} from "../../services/submissionApi";
+import {addNewSubmission, getAllSubmissions, getSubmissionById, updateSubmission, deleteSubmission, getSubmissionByUserId, getSubmissionByProblemIdAndUserId} from "../../services/submissionApi";
 
 // get all submissions
 export const getAllSubmissionsAsync = createAsyncThunk("submission/getAllSubmissions", getAllSubmissions);
@@ -18,11 +18,16 @@ export const deleteSubmissionAsync = createAsyncThunk("submission/deleteSubmissi
 
 // get submission by user id
 export const getSubmissionByUserIdAsync = createAsyncThunk("submission/getSubmissionByUserId", getSubmissionByUserId);
+
+// get submission by problem id and user id
+export const getSubmissionByProblemIdAndUserIdAsync = createAsyncThunk("submission/getSubmissionByProblemIdAndUserId", getSubmissionByProblemIdAndUserId);
+
 const submissionSlice = createSlice({
     name: "submission",
     initialState: {
         submissions: [],
         submissionUser: [],
+        submissionProblem: [],
         submission: null,
         isLoading: false,
         error: null,
@@ -112,6 +117,20 @@ const submissionSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload.resMessage;
         },
+
+        // get submission by problem id and user id
+        [getSubmissionByProblemIdAndUserIdAsync.pending]: (state, action) => {
+            state.isLoading = true;
+        },
+        [getSubmissionByProblemIdAndUserIdAsync.fulfilled]: (state, action) => {
+            console.log(action.payload);
+            state.isLoading = false;
+            state.submissionProblem = action.payload.data;
+        },
+        [getSubmissionByProblemIdAndUserIdAsync.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload.resMessage;
+        },
     }
 });
 
@@ -120,6 +139,7 @@ const submissionReducer = submissionSlice.reducer;
 export const submissionsSelector = (state) => state.submissionReducer.submissions;
 export const submissionSelector = (state) => state.submissionReducer.submission;
 export const submissionUserSelector = (state) => state.submissionReducer.submissionUser;
+export const submissionProblemSelector = (state) => state.submissionReducer.submissionProblem;
 
 export default submissionReducer;
 

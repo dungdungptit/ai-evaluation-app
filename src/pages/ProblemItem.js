@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
@@ -10,10 +10,11 @@ import jupyter_img from "../../src/assets/images/1200px-Jupyter_logo.svg.png"
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BoxProblems, BoxTitle } from '../../src/components/Box/BoxContainer';
-import { token } from '../../src/utils/constants';
+import { base_URL, token } from '../../src/utils/constants';
 import axios from 'axios';
 import { getProblemByIdAsync, problemSelector } from '../store/reducers/problemSlice';
-import { getSubmissionByUserIdAsync, submissionUserSelector } from '../store/reducers/submissionSlice';
+import { getSubmissionByProblemIdAndUserIdAsync, getSubmissionByUserIdAsync, submissionProblemSelector, submissionUserSelector } from '../store/reducers/submissionSlice';
+import { findServerAsync, handleEvaluateAsync, hubSelector } from '../store/reducers/hubSlice';
 
 
 
@@ -27,37 +28,44 @@ const ProblemItem = () => {
 
   const dispatch = useDispatch();
   const problemItem = useSelector(problemSelector);
-  const submissions = useSelector(submissionUserSelector);
+  const submissionProblem = useSelector(submissionProblemSelector);
   // submissions = submissions.filter(submission => submission.problemId === problemId);
   const auth = JSON.parse(localStorage.getItem('user'));
-  console.log(submissions);
+  console.log(submissionProblem);
 
   useEffect(() => {
-    dispatch(getSubmissionByUserIdAsync(auth.id));
+    dispatch(getSubmissionByProblemIdAndUserIdAsync({
+      problemId: problemId,
+      userId: auth.id,
+    }));
     dispatch(getProblemByIdAsync(problemId));
   }, [dispatch])
-  const rowsData = [];
 
-  const pageSize = rowsData.length;
-  const postData = {
-    username: "server01"
+  const getServer = useSelector(hubSelector);
+  console.log(getServer);
+  const handleGetServer = (e) => {
+    // e.preventDefault();
+    if (getServer.username === '') {
+      dispatch(findServerAsync());
+    }
   }
+
   const handleEvalute = (e) => {
     e.preventDefault();
-    const postDataAsync = async () => {
-      const response = await axios.post("http://192.168.88.122:5000/api/v1/hub/evaluate", JSON.stringify(postData),
-        {
-          headers:
-          {
-            token: token,
-            'Content-Type': 'application/json'
-          }
-        })
-      console.log(response)
-      return response.data;
+    if (getServer.username === '') {
+      alert("Please get server first!");
+      return;
     }
-    postDataAsync();
+    console.log(getServer.username, problemId);
+    dispatch(handleEvaluateAsync(
+      {
+        username: getServer.username,
+        problemId: problemId,
+      }
+    ));
   }
+
+
   const columns = [
     {
       field: 'index', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'No', minWidth: 50, sortable: false,
@@ -123,11 +131,12 @@ const ProblemItem = () => {
                 sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
                 color="primary"
                 aria-label="upload picture"
-                component="a"
+                // component="a"
                 startIcon={<img src={jupyter_img} alt="jupyter" width="16px" />}
                 variant="contained"
-                href={`https://hub.zcode.vn/hub/login?username=server01&token=123456`}
-                target="_blank"
+                onClick={(e) => { handleGetServer() }}
+              // href={`https://hub.zcode.vn/hub/login?username=server01&token=123456`}
+              // target="_blank"
               >
                 Setup Environment
               </Button>
@@ -150,16 +159,16 @@ const ProblemItem = () => {
             History :
           </Typography>
           <BoxTitle>
-            {!!submissions.length && (
+            {!!submissionProblem.length && (
               <DataGrid
-                rows={submissions}
+                rows={submissionProblem}
                 columns={columns}
                 disableSelectionOnClick
                 disableColumnMenu
                 hideFooter
                 autoHeight
                 disableColumnSelector
-                pageSize={submissions.length}
+                pageSize={submissionProblem.length}
                 rowsPerPageOptions={[20]}
                 sx={{
                   '& .MuiDataGrid-row': { cursor: 'pointer' },
