@@ -1,5 +1,6 @@
 import { base_URL, token } from "../utils/constants";
 import axios from "axios";
+console.log(base_URL);
 
 // get all problems
 export const getAllProblems = async () => {
