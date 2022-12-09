@@ -1,23 +1,25 @@
 FROM node:18-alpine
-WORKDIR /app
-# ==== COPY =====
-# Copy the package.json and package-lock.json files to the workdir
-COPY package*.json ./
-# Copy the rest of the files to the workdir
-COPY . .
+# Declaring env
+ENV NODE_ENV=production
 
-# ==== BUILD =====
-# Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
-RUN npm ci 
-# Build the app
+# Create app directory
+WORKDIR /app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+
+# Bundle app source
+COPY . .
 RUN npm run build
-# ==== RUN =======
-# Set the env to "production"
-ENV NODE_ENV production
-# Expose the port on which the app will be running (3000 is the default that `serve` uses)
+
+# Expose port and start application
 EXPOSE 3000
-# Start the app
-CMD [ "npx", "serve", "build" ]
+CMD [ "npm", "start" ]
+
+
+
+
 
 # docker build -t getting-started .
 # docker run -dp 3000:3000 getting-started

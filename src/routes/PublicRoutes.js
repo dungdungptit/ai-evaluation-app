@@ -18,7 +18,7 @@ const PublicRoutes = () => {
 
     const auth = useAuth()
     console.log(auth);
-    if (auth === "admin") {
+    if (auth === "admin" || auth === "superadmin") {
         return <Navigate to="/admin/problems" />
     } else if (auth === "user") {
         return <Navigate to="/problems" />

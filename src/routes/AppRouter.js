@@ -93,9 +93,9 @@ const AppRouter = () => {
                 </Route>
                 <Route path="*" element={<Page404 to="/404" />} />
             </Route>
-            <Route path="*" element={<PublicRoutes />}>
-                <Route path='register' element={<Register />} />
-                <Route path="login" element={<Login />} />
+            <Route element={<PublicRoutes />}>
+                <Route path="/login" element={<Login />} />
+                <Route path='/register' element={<Register />} />
             </Route>
         </Routes>
     )
