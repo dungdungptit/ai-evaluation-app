@@ -23,8 +23,8 @@ const hubSlice = createSlice({
     extraReducers: {
         [findServerAsync.fulfilled]: (state, action) => {
             console.log(action.payload);
-            state.username = action.payload.username;
-            state.token = action.payload.token;
+            state.username = action.payload.data.username;
+            state.token = action.payload.data.token;
             state.isLoading = true;
         },
         [handleEvaluateAsync.fulfilled]: (state, action) => {

@@ -14,7 +14,7 @@ import { base_URL, token } from '../../src/utils/constants';
 import axios from 'axios';
 import { getProblemByIdAsync, problemSelector } from '../store/reducers/problemSlice';
 import { getSubmissionByProblemIdAndUserIdAsync, getSubmissionByUserIdAsync, submissionProblemSelector, submissionUserSelector } from '../store/reducers/submissionSlice';
-import { findServerAsync, handleEvaluateAsync, hubSelector } from '../store/reducers/hubSlice';
+import { findServerAsync, handleEvaluateAsync, hubSelector, setToken, setUsername } from '../store/reducers/hubSlice';
 
 
 
@@ -48,10 +48,12 @@ const ProblemItem = () => {
     if (getServer.username === '') {
       dispatch(findServerAsync()).then((res) => {
         console.log(res);
+        setUsername(res.payload.data.username);
+        setToken(res.payload.data.token);
+        window.open(`https://hub.zcode.vn/hub/login?username=${res.payload.data.username}&token=${res.payload.data.token}`, '_blank');
       });
     }
-
-    if(getServer.username !== '') {
+    else if(getServer.username !== '') {
       window.open(`https://hub.zcode.vn/hub/login?username=${getServer.username}&token=${getServer.token}`, '_blank');
     }
   }
