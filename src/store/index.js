@@ -6,6 +6,7 @@ import subgroupReducer from "./reducers/subgroupSlice";
 import userReducer from "./reducers/userSlice";
 import submissionReducer from "./reducers/submissionSlice";
 import hubReducer from "./reducers/hubSlice";
+import adminReducer from "./reducers/adminSlice";
 
 // store
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
         groupReducer,
         subgroupReducer,
         userReducer,
+        adminReducer,
         submissionReducer,
         hubReducer
     }

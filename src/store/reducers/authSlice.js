@@ -52,6 +52,7 @@ const authSlice = createSlice({
             state.isLoading = true;
         },
         [registerAsync.fulfilled]: (state, action) => {
+            console.log(action.payload);
             state.isLoading = false;
             state.isLoading = false;
             const user = action.payload.data;

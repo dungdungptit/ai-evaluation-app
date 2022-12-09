@@ -11,6 +11,7 @@ import WebAssetIcon from '@mui/icons-material/WebAsset';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import useWindowDimensions from '../components/useWindowDimensions/useWindowDimensions';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
 const SidebarBox = styled(Box)({
     display: 'flex',
@@ -31,12 +32,40 @@ const getIndex = (path) => {
             return 3;
         case 'admin/submission':
             return 4;
+        case 'admin/admins':
+            return 5;
         default:
             return -1;
     }
 }
 
 const AdminSidebar = () => {
+    const useAuth = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return JSON.parse(user);
+        } else {
+            return null
+        }
+    }
+
+    const isAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('admin');
+        } else {
+            return false
+        }
+    }
+
+    const isSuperAdmin = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return !!user && JSON.parse(user).role.includes('superadmin');
+        } else {
+            return false
+        }
+    }
     const location = useLocation();
     const { pathname } = location;
     // console.log(pathname);
@@ -164,6 +193,20 @@ const AdminSidebar = () => {
                         </ListItemIcon>
                         <ListItemText primary="Submission" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
+
+                    {isSuperAdmin() && (
+                        <ListItemButton
+                            component={Link}
+                            to={"/admin/admins"}
+                            selected={selectedIndex === 5}
+                            onClick={(event) => handleListItemClick(event, 5)}
+                        >
+                            <ListItemIcon>
+                                <SupervisorAccountIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Admin" sx={{ display: open ? "block" : "none" }} />
+                        </ListItemButton>
+                    )}
                     
                 </List>
             </SidebarBox>

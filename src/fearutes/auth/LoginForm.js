@@ -4,9 +4,10 @@ import { Stack } from '@mui/system';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/images/logo_ptit.png';
+
 import { ButtonDefault } from '../../components/Button/ButtonDefault';
 import { authSelector, loginAsync } from '../../store/reducers/authSlice';
+import { logo } from '../../utils/constants';
 
 const LoginForm = () => {
 
@@ -25,8 +26,12 @@ const LoginForm = () => {
     e.preventDefault();
     const { username, password } = values;
     dispatch(loginAsync({ username, password }))
-      .then(() => {
-        window.location.reload();
+      .then((res) => {
+        // window.location.reload();
+        console.log(res);
+        if(res.type === 'auth/login/fulfilled') {
+          window.location.reload();
+        }
       })
       .catch(() => {
         setValues({ ...values, resMessage: 'Login failed!' });

@@ -49,6 +49,10 @@ const Submissions = () => {
 
     };
 
+    const handleRowClickProblem = (params) => {
+        navigate(`/admin/problems/${params.row.problemId}`);
+    };
+
     const columns = [
         {
             field: 'index', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'No', minWidth: 50, sortable: false,
@@ -70,16 +74,16 @@ const Submissions = () => {
         {
             field: 'userId', headerClassName: 'super-app-theme--header', headerName: 'Username', minWidth: 100, flex: 2,
             renderCell: (params) => (
-                <Link href="" onClick={() => handleRowClick(params)}>
-                    {users.find(user => user.id === params.row.userId).username}
-                </Link>
+                // <Link sx={{cursor: 'pointer'}} onClick={() => handleRowClickProblem(params)}>
+                // </Link>
+                    `${users.find(user => user.id === params.row.userId)?.username}`
             ),
         },
         {
             field: 'problemId', headerClassName: 'super-app-theme--header', headerName: 'Problem', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                <Link href="" onClick={() => handleRowClick(params)}>
-                    {problems.find(problem => problem.id === params.row.problemId).title}
+                <Link sx={{cursor: 'pointer'}} onClick={() => handleRowClickProblem(params)}>
+                    {problems.find(problem => problem.id === params.row.problemId)?.title}
                 </Link>
             ),
         },
@@ -88,33 +92,6 @@ const Submissions = () => {
         { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy Test', minWidth: 120, flex: 1, sortable: false },
         { field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false },
         { field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false },
-        // {
-        //     field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 200, sortable: false,
-        //     renderCell: (params) => {
-        //         const onClick = (e) => {
-        //             const currentRow = params.row;
-        //             return alert(JSON.stringify(currentRow, null, 4));
-        //         };
-
-        //         const onEdit = (e) => {
-        //             const currentRow = params.row;
-        //             navigate(`/admin/submissions/edit/${params.row.id}`, { state: params.row });
-        //         };
-
-        //         const onDelete = (e) => {
-        //             const submissionId = params.row.id;
-        //             dispatch(deleteSubmissionAsync(submissionId));
-        //             window.location.reload();
-        //         };
-
-        //         return (
-        //             <Stack direction="row" spacing={2}>
-        //                 <Button variant="contained" color="warning" size="small" onClick={onEdit}>Edit</Button>
-        //                 <Button variant="contained" color="error" size="small" onClick={onDelete}>Delete</Button>
-        //             </Stack>
-        //         );
-        //     },
-        // },
     ];
 
     return (

@@ -31,3 +31,4 @@ export const deleteUser = async (id) => {
     const respone = await axios.delete(`${base_URL}/api/v1/users/delete/${id}`, {headers: {token: token}});
     return respone.data;
 }
+

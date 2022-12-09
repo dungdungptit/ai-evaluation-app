@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './ProtectedRoutes';
 import PublicRoutes from './PublicRoutes';
 import { Users, UserItem, UserEdit, UserNew } from '../pages/admin/user';
+import { Admins, AdminItem, AdminEdit, AdminNew } from '../pages/admin/admin';
 import { ProblemItemNew, AdminProblems, AdminProblemItem, ProblemItemEdit } from '../pages/admin/problem';
 import Register from '../pages/Register';
 import { GroupEdit, GroupItem, GroupNew, Groups } from '../pages/admin/group';
@@ -66,6 +67,11 @@ const AppRouter = () => {
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/:id" element={<UserItem />} />}
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/add" element={<UserNew />} />}
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/users/edit/:id" element={<UserEdit />} />}
+
+                    {isSuperAdmin() && <Route path="admin/admins" element={<Admins />} />}
+                    {isSuperAdmin() && <Route path="admin/admins/:id" element={<AdminItem />} />}
+                    {isSuperAdmin() && <Route path="admin/admins/add" element={<AdminNew />} />}
+                    {isSuperAdmin() && <Route path="admin/admins/edit/:id" element={<AdminEdit />} />}
 
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/group" element={<Groups />} />}
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/group/:id" element={<GroupItem />} />}

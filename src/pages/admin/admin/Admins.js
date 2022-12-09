@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useLocation, useNavigate } from "react-router-dom";
 
 // import data
-// import { subgroups } from '../../data/subgroups';
+// import { admins } from '../../data/admins';
 
 import {
     BoxContainer,
@@ -16,25 +16,22 @@ import {
 } from '../../../components/Box/BoxContainer';
 import DataTable from '../../../components/DataTable/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSubgroupAsync, getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice.js';
-import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice';
+import { deleteAdminAsync, getAllAdminsAsync, adminsSelector } from '../../../store/reducers/adminSlice.js';
 
 
-// const rowsData = subgroups;
+// const rowsData = admins;
 
-const Subgroups = () => {
+const Admins = () => {
     const dispatch = useDispatch();
-    const subgroups = useSelector(subgroupsSelector);
-    const groups = useSelector(groupsSelector);
+    const admins = useSelector(adminsSelector);
 
     useEffect(() => {
-        dispatch(getAllGroupsAsync());
-        dispatch(getAllSubgroupsAsync());
+        dispatch(getAllAdminsAsync());
     }, [dispatch]);
 
     const location = useLocation();
 
-    // Click render SubgroupItem
+    // Click render AdminItem
     const navigate = useNavigate();
 
     const handleRowClick = (param, event) => {
@@ -42,7 +39,7 @@ const Subgroups = () => {
         console.log(param);
         console.log(event);
         console.log(location.pathname);
-        navigate(`/admin/subgroup/${param.row.id}`, { state: param.row });
+        navigate(`/admin/admins/${param.row.id}`, { state: param.row });
 
     };
 
@@ -57,15 +54,11 @@ const Subgroups = () => {
             }
         },
         {
-            field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Title', minWidth: 250, flex: 2,
+            field: 'username', headerClassName: 'super-app-theme--header', headerName: 'User Name', minWidth: 250, flex: 2,
         },
-        { field: 'description', headerClassName: 'super-app-theme--header', headerName: 'Description', minWidth: 200, flex: 1, sortable: false, },
-        {
-            field: 'groupId', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false,
-            renderCell: (params) => (
-                `${groups.find(group => group.id === params.value).title}`
-            )
-        },
+        { field: 'email', headerClassName: 'super-app-theme--header', headerName: 'Email', minWidth: 200, flex: 1, sortable: false, },
+        { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: 'First Name', minWidth: 200, flex: 1, sortable: false, },
+        { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: 'Last Name', minWidth: 200, flex: 1, sortable: false },
         {
             field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 200, sortable: false,
             renderCell: (params) => {
@@ -76,12 +69,12 @@ const Subgroups = () => {
 
                 const onEdit = (e) => {
                     const currentRow = params.row;
-                    navigate(`/admin/subgroup/edit/${params.row.id}`, { state: params.row });
+                    navigate(`/admin/admins/edit/${params.row.id}`, { state: params.row });
                 };
 
                 const onDelete = (e) => {
-                    const currentRow = params.row;
-                    dispatch(deleteSubgroupAsync(currentRow.id)).then((res) => {
+                    const adminId = params.row.id;
+                    dispatch(deleteAdminAsync(adminId)).then((res) => {
                         console.log(res);
                         window.location.reload();
                     })
@@ -109,28 +102,28 @@ const Subgroups = () => {
                             fontSize: "1.5rem",
                             fontWeight: 700,
                         }}>
-                            Subgroups
+                            Admins
                             <Breadcrumbs maxItems={2} aria-label="breadcrumb" sx={{ mt: 1 }}>
                                 <Link underline="hover" color="inherit" href="">
                                     Home
                                 </Link>
-                                <Typography color="text.primary">Subgroups</Typography>
+                                <Typography color="text.primary">Admins</Typography>
                             </Breadcrumbs>
                         </Typography>
 
                         {/* Add custom button to the toolbar */}
-                        {/* a link to /subgroup/Add */}
+                        {/* a link to /admins/Add */}
                         <Button
                             variant="contained"
                             startIcon={<AddIcon />}
-                            onClick={() => navigate('/admin/subgroup/add')}
+                            onClick={() => navigate('/admin/admins/add')}
                         >
-                            Add Subgroup
+                            Add Admin
                         </Button>
                     </BoxStack>
 
 
-                    <DataTable rows={subgroups} columns={columns} />
+                    <DataTable rows={admins} columns={columns} />
 
                 </BoxTitle>
             </BoxContainer>
@@ -138,4 +131,4 @@ const Subgroups = () => {
     )
 }
 
-export default Subgroups
+export default Admins

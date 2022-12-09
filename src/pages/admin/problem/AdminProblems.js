@@ -85,8 +85,13 @@ const Problems = () => {
 
                 const onDelete = (e) => {
                     const problemId = params.row.id;
-                    dispatch(deleteProblemAsync(problemId));
-                    window.location.reload();
+                    dispatch(deleteProblemAsync(problemId)).then((res) => {
+                        console.log(res);
+                        window.location.reload();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });;
                 };
 
                 return (

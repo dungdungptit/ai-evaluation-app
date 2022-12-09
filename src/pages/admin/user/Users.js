@@ -39,7 +39,7 @@ const Users = () => {
         console.log(param);
         console.log(event);
         console.log(location.pathname);
-        navigate(`/admin/users/${param.row.id}`, { state: param.row });
+        // navigate(`/admin/users/${param.row.id}`, { state: param.row });
 
     };
 
@@ -55,9 +55,6 @@ const Users = () => {
         },
         {
             field: 'username', headerClassName: 'super-app-theme--header', headerName: 'User Name', minWidth: 250, flex: 2,
-            renderCell: (params) => (
-                <Link href="" onClick={() => handleRowClick(params)}>{params.value}</Link>
-            ),
         },
         { field: 'email', headerClassName: 'super-app-theme--header', headerName: 'Email', minWidth: 200, flex: 1, sortable: false, },
         { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: 'First Name', minWidth: 200, flex: 1, sortable: false, },
@@ -77,8 +74,14 @@ const Users = () => {
 
                 const onDelete = (e) => {
                     const userId = params.row.id;
-                    dispatch(deleteUserAsync(userId));
-                    window.location.reload();
+                    dispatch(deleteUserAsync(userId))
+                        .then((res) => {
+                            console.log(res);
+                            window.location.reload();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 };
 
                 return (

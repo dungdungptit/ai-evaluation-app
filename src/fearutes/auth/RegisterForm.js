@@ -3,10 +3,11 @@ import { Box, Button, Container, FormControl, IconButton, InputAdornment, InputL
 import { Stack } from '@mui/system';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/images/logo_ptit.png';
+
 import { useDispatch } from 'react-redux';
 import { registerAsync } from '../../store/reducers/authSlice';
 import { ButtonDefault } from '../../components/Button/ButtonDefault';
+import { logo } from '../../utils/constants';
 
 
 const RegisterForm = () => {
@@ -38,11 +39,11 @@ const RegisterForm = () => {
         }
 
         if (values.username !== '' && values.password !== '' && values.email !== '' && values.firstName !== '' && values.lastName !== '') {
-            dispatch(registerAsync(user))
-                .then(() => {
-                    navigate('/login');
-                })
-                .catch(() => {
+            dispatch(registerAsync(user)).then((res) => {
+                    if (res.type === 'auth/register/fulfilled') {
+                        navigate('/login');
+                    }
+                }).catch(() => {
                     setValues({ ...values, resMessage: 'Register failed!' });
                 })
         }
@@ -195,7 +196,7 @@ const RegisterForm = () => {
                     <InputLabel htmlFor="outlined-adornment-lastname">
                         Last name
                     </InputLabel>
-                    <OutlinedInput sx={{mb: 2}}
+                    <OutlinedInput sx={{ mb: 2 }}
                         id="outlined-adornment-lastname"
                         value={values.lastName}
                         onChange={handleChange('lastName')}
@@ -205,7 +206,7 @@ const RegisterForm = () => {
 
                 {/* username already */}
                 {values.resMessage && (
-                    <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#f44336', textAlign: 'center', fontSize: "1rem", m:"0px !important",  mb: "16px !important" }}>
+                    <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#f44336', textAlign: 'center', fontSize: "1rem", m: "0px !important", mb: "16px !important" }}>
                         {values.resMessage}
                     </Typography>
                 )}

@@ -49,9 +49,6 @@ const Groups = () => {
         },
         {
             field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Title', minWidth: 250, flex: 2,
-            renderCell: (params) => (
-                <Link href="" onClick={() => handleRowClick(params)}>{params.value}</Link>
-            ),
         },
         { field: 'description', headerClassName: 'super-app-theme--header', headerName: 'Description', minWidth: 200, flex: 1, sortable: false, },
         {
@@ -69,8 +66,13 @@ const Groups = () => {
 
                 const onDelete = (e) => {
                     const groupId = params.row.id;
-                    dispatch(deleteGroupAsync(groupId));
-                    window.location.reload();
+                    dispatch(deleteGroupAsync(groupId)).then((res) => {
+                        console.log(res);
+                        window.location.reload();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });;
                 };
 
                 return (
