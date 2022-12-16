@@ -21,6 +21,8 @@ const authSlice = createSlice({
             state.isAuth = false;
             localStorage.removeItem('user');
             localStorage.removeItem('token');
+            sessionStorage.removeItem('usernamehub');
+            sessionStorage.removeItem('tokenhub');
         },
     },
     extraReducers: {
@@ -34,7 +36,7 @@ const authSlice = createSlice({
             console.log(action.payload);
             state.isLoading = false;
             const user = action.payload.data;
-            const {accessToken } = action.payload.data;
+            const { accessToken } = action.payload.data;
             state.user = user;
             state.token = accessToken;
             localStorage.setItem('user', JSON.stringify(user));
@@ -56,7 +58,7 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.isLoading = false;
             const user = action.payload.data;
-            const {accessToken } = action.payload.data;
+            const { accessToken } = action.payload.data;
             state.user = user;
             state.token = accessToken;
             state.isAuth = true;

@@ -55,10 +55,25 @@ const AdminProblemItem = () => {
                 )
             }
         },
-        { field: 'description', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Description', minWidth: 100, flex: 1, sortable: false, },
-        { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false },
-        { field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false },
-        { field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false },
+        
+        {
+            field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+            renderCell: (params) => (
+              Number(params.row.accuracyTest).toFixed(2) + '%'
+            )
+          },
+          {
+            field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false,
+            renderCell: (params) => (
+              Number(params.row.excutionTime).toFixed(2) + 's'
+            )
+          },
+          {
+            field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false,
+            renderCell: (params) => (
+              Number(params.row.excutionMemories) > 1024 ? (Number(params.row.excutionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.excutionMemories).toFixed(0) + 'B'
+            )
+          },
     ];
 
     return (

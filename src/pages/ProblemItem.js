@@ -48,6 +48,13 @@ const ProblemItem = () => {
   console.log(getServer);
   const handleGetServer = (e) => {
     // e.preventDefault();
+    if(sessionStorage.getItem('usernamehub') !== null && sessionStorage.getItem('tokenhub') !== null){
+      dispatch(setUsername(sessionStorage.getItem('usernamehub')));
+      dispatch(setToken(sessionStorage.getItem('tokenhub')));
+      window.open(`https://hub.zcode.vn/hub/login?username=${sessionStorage.getItem('usernamehub')}&token=${sessionStorage.getItem('tokenhub')}`, '_blank');
+      return;
+    }
+    
     if (getServer.username === '') {
       dispatch(findServerAsync(
         {
@@ -55,11 +62,13 @@ const ProblemItem = () => {
         }
       )).then((res) => {
         console.log(res);
-        setUsername(res.payload.data.username);
-        setToken(res.payload.data.token);
-        window.open(`https://hub.zcode.vn/hub/login?username=${res.payload.data.username}&token=${res.payload.data.token}`, '_blank');
-        // sessionStorage.setItem('usernamehub', res.payload.data.username);
-        // sessionStorage.setItem('tokenhub', res.payload.data.token);
+        if(res.type === 'hub/findServer/fulfilled'){
+          dispatch(setUsername(res.payload.data.username));
+          dispatch(setToken(res.payload.data.token));
+          window.open(`https://hub.zcode.vn/hub/login?username=${res.payload.data.username}&token=${res.payload.data.token}`, '_blank');
+          sessionStorage.setItem('usernamehub', res.payload.data.username);
+          sessionStorage.setItem('tokenhub', res.payload.data.token);
+        }
         // set cookie for 1 day
         // document.cookie = `usernamehub=${res.payload.data.username}; max-age=86400`;
         // document.cookie = `tokenhub=${res.payload.data.token}; max-age=86400`;
@@ -87,10 +96,17 @@ const ProblemItem = () => {
       {
         username: getServer.username,
         problemId: problemId,
+        userId: auth.id,
       }
     )).then((res) => {
       console.log(res);
       setLoading(false);
+      if(res.type=== 'hub/handleEvaluate/fulfilled'){
+        // alert("Evaluate successfully!");
+        // sessionStorage.removeItem('usernamehub');
+        // sessionStorage.removeItem('tokenhub');
+        navigate('/history');
+      }
     }).catch((err) => {
       console.log(err);
       setLoading(false);
@@ -122,10 +138,25 @@ const ProblemItem = () => {
         `${problemItem.title}`
       ),
     },
-    { field: 'description', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Description', minWidth: 100, flex: 1, sortable: false, },
-    { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false },
-    { field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false },
-    { field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false },
+    
+    {
+      field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+      renderCell: (params) => (
+        Number(params.row.accuracyTest).toFixed(2) + '%'
+      )
+    },
+    {
+      field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false,
+      renderCell: (params) => (
+        Number(params.row.excutionTime).toFixed(2) + 's'
+      )
+    },
+    {
+      field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false,
+      renderCell: (params) => (
+        Number(params.row.excutionMemories) > 1024 ? (Number(params.row.excutionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.excutionMemories).toFixed(0) + 'B'
+      )
+    },
   ];
 
   return (
