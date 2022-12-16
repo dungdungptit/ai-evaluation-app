@@ -49,7 +49,11 @@ const ProblemItem = () => {
   const handleGetServer = (e) => {
     // e.preventDefault();
     if (getServer.username === '') {
-      dispatch(findServerAsync({problemId: problemId})).then((res) => {
+      dispatch(findServerAsync(
+        {
+          problemId: problemId
+        }
+      )).then((res) => {
         console.log(res);
         setUsername(res.payload.data.username);
         setToken(res.payload.data.token);
