@@ -1,8 +1,8 @@
 import { base_URL, token } from "../utils/constants";
 import axios from "axios";
 
-export const findServer = async () => {
-    const response = await axios.get(`${base_URL}/api/v1/hub/find`, { headers: { token: token } })
+export const findServer = async (problemId) => {
+    const response = await axios.post(`${base_URL}/api/v1/hub/find`, { headers: { token: token } })
     return response.data;
 }
 

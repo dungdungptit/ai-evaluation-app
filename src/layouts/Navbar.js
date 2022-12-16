@@ -50,8 +50,8 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 const pages = [
     { name: 'Problems', linkTo: "problems" },
     { name: 'History', linkTo: "history" },
-    { name: 'Guide', linkTo: "guide" },
-    { name: 'Contact', linkTo: "contact" },
+    // { name: 'Guide', linkTo: "guide" },
+    // { name: 'Contact', linkTo: "contact" },
 ]
 
 const Navbar = () => {
