@@ -28,9 +28,9 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
     position: 'fixed',
     top: 0,
     zIndex: 999,
-    color: 'white',
+    color: '#fff',
     WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.72)' : 'rgba(0, 0, 0, 0.72)',
+    backgroundColor: '#009be5',
     [theme.breakpoints.up('lg')]: {
         width: "100%",
     },
@@ -199,7 +199,7 @@ const Navbar = () => {
                             onClick={handleCloseNavMenu}
                             component={Link}
                             to={page.linkTo}
-                            sx={{ my: 0, color: '#000', display: 'block', fontWeight: 'bold', fontSize: 14 }}
+                            sx={{ my: 0, color: '#fff', display: 'block', fontWeight: 500, fontSize: 14 }}
                         >
                             {page.name}
                         </Button>

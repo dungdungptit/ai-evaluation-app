@@ -17,6 +17,7 @@ import DatasetLinkedIcon from '@mui/icons-material/DatasetLinked';
 const SidebarBox = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: '#101f33'
 })
 
 const getIndex = (path) => {
@@ -112,32 +113,56 @@ const AdminSidebar = () => {
             },
             zIndex: open ? 402 : 1,
             borderRight: '1px solid #e0e0e0',
-            backgroundColor: '#fff',
+            backgroundColor: '#081627',
+            color: '#e6eef5',
             minWidth: open ? 280 : 72,
             width: open ? { xs: 0, lg: 280 } : { xs: 0, lg: 72 },
             transition: 'all 0.3s linear',
             minHeight: "100vh",
         }}>
-            <SidebarBox p={2} sx={{ p: open ? 2 : 1, py: 1, transition: 'all 0.3s linear', }} >
+            <SidebarBox sx={{
+                transition: 'all 0.3s linear',
+                '& .MuiTypography-root': {
+                    display: open ? 'block' : 'none',
+                    transition: 'all 0.3s linear',
+                },
+
+            }} >
                 <Stack direction="row" spacing={0}
                     sx={{
                         alignItems: 'center',
                         justifyContent: open ? 'space-between' : 'center',
                         height: 48,
+                        backgroundColor: '#081627',
+                        p: open ? 2 : 1, py: 1,
+                        '& .MuiSvgIcon-root': {
+                            transition: 'all 0.3s linear',
+                        },
                     }}
                 >
                     <Link className='' to={"/"} style={{ textDecoration: "none", }}>
-                        <Typography variant="h6" component="h1" sx={{ flexGrow: 1, p: 1, whiteSpace: "nowrap", color: "#000", fontWeight: "bold", display: open ? "block" : "none" }}>
+                        <Typography variant="h6" component="h1" sx={{ flexGrow: 1, p: 1, whiteSpace: "nowrap", color: "#e6eef5", fontWeight: 500, display: open ? 'inherit' : 'none', transition: 'all 0.3s linear', }}>
                             AI Evaluation App
                         </Typography>
                     </Link>
 
-                    <MenuIcon sx={{ display: open ? "none" : "block", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickOpen} />
-                    <MenuOpenIcon sx={{ display: open ? "block" : "none", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickClose} />
+                    <MenuIcon sx={{ display: open ? "none" : "block", color: "#e6eef5", fontSize: 28, cursor: "pointer" }} onClick={handleClickOpen} />
+                    <MenuOpenIcon sx={{ display: open ? 'inherit' : 'none', color: "#e6eef5", fontSize: 28, cursor: "pointer" }} onClick={handleClickClose} />
                 </Stack>
 
                 <List
-                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    sx={{
+                        p: 1, borderTop: '1px solid #2e3847', borderBottom: '1px solid #2e3847',
+                        '& .MuiTypography-root': {
+                            display: open ? 'block' : 'none',
+                            transition: 'all 0.3s linear',
+                        },
+                        '& .MuiListItemIcon-root': {
+                            minWidth: open ? 40 : 0,
+                            transition: 'all 0.3s linear',
+                        },
+
+                    }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
                 >
@@ -147,10 +172,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 0}
                         onClick={(event) => handleListItemClick(event, 0)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <QuizIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Problems" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="Problems" />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -158,10 +183,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 1}
                         onClick={(event) => handleListItemClick(event, 1)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <AccountBoxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="User" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="User" />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -169,10 +194,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 2}
                         onClick={(event) => handleListItemClick(event, 2)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <WebAssetIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Group" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="Group" />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -180,10 +205,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 3}
                         onClick={(event) => handleListItemClick(event, 3)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <DynamicFeedIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Subroup" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="Subroup" />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -191,10 +216,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 4}
                         onClick={(event) => handleListItemClick(event, 4)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <CheckBoxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Submission" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="Submission" />
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
@@ -202,10 +227,10 @@ const AdminSidebar = () => {
                         selected={selectedIndex === 6}
                         onClick={(event) => handleListItemClick(event, 6)}
                     >
-                        <ListItemIcon>
+                        <ListItemIcon sx={{ color: "#e6eef5" }}>
                             <DatasetLinkedIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Datasets" sx={{ display: open ? "block" : "none" }} />
+                        <ListItemText primary="Datasets" />
                     </ListItemButton>
 
                     {isSuperAdmin() && (
@@ -215,10 +240,14 @@ const AdminSidebar = () => {
                             selected={selectedIndex === 5}
                             onClick={(event) => handleListItemClick(event, 5)}
                         >
-                            <ListItemIcon>
+                            <ListItemIcon sx={{ color: "#e6eef5" }}>
                                 <SupervisorAccountIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Admin" sx={{ display: open ? "block" : "none" }} />
+                            <ListItemText primary="Admin" sx={{
+                                display: open ? 'inherit' : 'none', '& .MuiTypography-root': {
+                                    transition: 'all 0.3s linear',
+                                }
+                            }} />
                         </ListItemButton>
                     )}
 

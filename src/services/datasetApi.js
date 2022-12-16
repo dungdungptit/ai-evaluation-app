@@ -31,10 +31,8 @@ export const postDatasetSample = async (data) => {
     return response.data;
 };
 
-export const deleteDatasetSample = async (data) => {
-    console.log(data);
-    console.log(token);
-    const response = await axios.post(`${base_URL}/api/v1/datas/samples/delete`, data, { headers: { token: token } });
+export const deleteDatasetSample = async (sampleId) => {
+    const response = await axios.delete(`${base_URL}/api/v1/datas/samples/delete/${sampleId}`, { headers: { token: token } });
     console.log(response);
     return response.data;
 };

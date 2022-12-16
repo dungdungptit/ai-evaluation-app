@@ -60,16 +60,6 @@ const Datasets = () => {
             }
         },
         { field: 'path', headerClassName: 'super-app-theme--header', headerName: 'Path', minWidth: 200, flex: 1, sortable: false, },
-        {
-            field: 'Problem', headerClassName: 'super-app-theme--header', headerName: 'Problem', minWidth: 200, flex: 1, sortable: false,
-            renderCell: (params) => {
-                return (
-                    <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClickProblem(params)}>
-                        {params.row.problem?.title}
-                    </Link>
-                )
-            }
-        },
         { field: 'numberOfSamples', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Number Of Samples', minWidth: 200, flex: 1, sortable: false, },
         {
             field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 80, sortable: false,

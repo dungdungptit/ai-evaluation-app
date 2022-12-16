@@ -69,11 +69,8 @@ const DatasetItem = () => {
                 };
 
                 const onDelete = (e) => {
-                    const datasetId = params.row.id;
-                    dispatch(deleteDatasetSampleAsync({
-                        datasetPath: datasetItem.path,
-                        sampleTitle: params.row.title,
-                    })).then((res) => {
+                    const sampleId = params.row.id;
+                    dispatch(deleteDatasetSampleAsync(sampleId)).then((res) => {
                         console.log(res);
                         window.location.reload();
                     })

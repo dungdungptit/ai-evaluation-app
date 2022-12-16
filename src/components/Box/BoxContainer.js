@@ -1,12 +1,13 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Paper, Stack } from '@mui/material';
 
 export const BoxContainer = (props) => (
-    <Box
+    <Paper
+        elevation={1}
         sx={{
             height: 'auto',
-            // py: 4,
+            py: 2,
             // pt: 6,
-            px: 2,
+            px: 4,
             maxWidth: 1200,
             width: '100%',
             margin: '0 auto',
@@ -14,7 +15,7 @@ export const BoxContainer = (props) => (
         }}
     >
         {props.children}
-    </Box>
+    </Paper>
 );
 
 export const BoxProblems = (props) => (

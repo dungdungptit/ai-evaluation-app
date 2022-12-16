@@ -21,7 +21,7 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
     position: 'static',
     color: 'white',
     WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.72)' : 'rgba(0, 0, 0, 0.72)',
+    backgroundColor: '#009be5',
     [theme.breakpoints.up('lg')]: {
         width: "100%",
     },

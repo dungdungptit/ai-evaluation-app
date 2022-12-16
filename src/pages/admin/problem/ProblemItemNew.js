@@ -14,6 +14,7 @@ import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/group
 import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice';
 import { BoxContainer } from '../../../components/Box/BoxContainer';
 import { green } from '@mui/material/colors';
+import { datasetsSelector, getAllDatasetsAsync } from '../../../store/reducers/datasetSlice';
 
 const checkEmpty = (data) => {
     for (const key in data) {
@@ -37,11 +38,13 @@ const ProblemItemNew = ({ state }) => {
             outputDescription: '',
             groupId: '',
             subGroupId: '',
+            datasetId: '',
         }
     );
 
     const groups = useSelector(groupsSelector);
     const subgroups = useSelector(subgroupsSelector);
+    const datasets = useSelector(datasetsSelector);
     console.log(groups);
     const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ const ProblemItemNew = ({ state }) => {
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllSubgroupsAsync());
+        dispatch(getAllDatasetsAsync());
     }, [dispatch])
 
 
@@ -76,6 +80,7 @@ const ProblemItemNew = ({ state }) => {
             inputDescription: problem.inputDescription,
             outputDescription: problem.outputDescription,
             subGroupId: problem.subGroupId,
+            datasetId: problem.datasetId,
         }
         if (checkEmpty(newProblem)) {
             return;
@@ -157,6 +162,27 @@ const ProblemItemNew = ({ state }) => {
                     name="outputDescription"
                     onChange={handleChange}
                 />
+                {/* Lable */}
+                <TextField sx={{ m: 1, width: "100%" }}
+                    id="outlined-select-currency"
+                    select
+                    label="Dataset"
+                    value={problem.datasetId}
+                    name="datasetId"
+                    onChange={handleChange}
+                    InputProps={{
+                        required: true,
+                    }}
+                >
+
+                    {!!datasets && datasets.length > 0 &&
+                        datasets.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.title}
+                            </MenuItem>
+                        ))
+                    }
+                </TextField>
                 {/* group */}
                 <TextField sx={{ m: 1, width: "100%" }}
                     id="outlined-select-currency"
@@ -191,7 +217,7 @@ const ProblemItemNew = ({ state }) => {
 
                 </TextField>
 
-                {messageValidate && messageValidate !== '' ? <Alert sx={{width: "100%", boxSizing: 'border-box'}} severity="error">{messageValidate}</Alert> : null}
+                {messageValidate && messageValidate !== '' ? <Alert sx={{ width: "100%", boxSizing: 'border-box' }} severity="error">{messageValidate}</Alert> : null}
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
                     <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>

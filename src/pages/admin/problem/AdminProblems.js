@@ -38,6 +38,10 @@ const Problems = () => {
 
     };
 
+    const handleRowClickDataset = (param, event) => {
+        param.row.dataset?.id && navigate(`/admin/datasets/${param.row.dataset?.id}`, { state: param.row.dataset });
+    };
+
     const columns = [
         {
             field: 'index', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'No', minWidth: 50, sortable: false,
@@ -49,19 +53,25 @@ const Problems = () => {
         {
             field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 250, flex: 2,
             renderCell: (params) => (
-                <Link href="" onClick={() => handleRowClick(params)}>{params.value}</Link>
+                <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClick(params)}>{params.value}</Link>
             ),
+        },
+        {
+            field: 'datasetTitle', headerClassName: 'super-app-theme--header', headerName: 'Dataset', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.dataset?.title ? <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClickDataset(params)}>{params.row.dataset?.title}</Link> : "None"
+            )
         },
         {
             field: 'group', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                `${params.row.group.title}`
+                `${params.row.group?.title}`
             )
         },
         {
             field: 'subgroup', headerClassName: 'super-app-theme--header', headerName: 'Sub group', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                `${params.row.subGroup.title}`
+                `${params.row.subGroup?.title}`
 
             )
         },

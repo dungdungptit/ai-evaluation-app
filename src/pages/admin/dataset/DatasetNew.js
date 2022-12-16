@@ -48,7 +48,6 @@ const DatasetNew = () => {
   const [dataset, setDataset] = useState(
     {
       title: '',
-      problemId: '',
     }
   );
 
@@ -58,7 +57,6 @@ const DatasetNew = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const problems = useSelector(problemfreeSelector);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -221,30 +219,7 @@ const DatasetNew = () => {
             required: true,
           }}
         />
-        {/* Lable */}
-        <TextField sx={{ m: 1, width: "100%" }}
-          id="outlined-select-currency"
-          select
-          label="Problem"
-          value={dataset.problemId}
-          name="problemId"
-          onChange={handleChange}
-          InputProps={{
-            required: true,
-          }}
-        >
-          
-          {!!problems && problems.length > 0 ?
-            problems.map((option) => (
-              <MenuItem key={option.id} value={option.id}>
-                {option.title}
-              </MenuItem>
-            )) :
-            <MenuItem key={1} value={1} disabled>
-              All problems already own the dataset
-            </MenuItem>
-          }
-        </TextField>
+        
         {/* videos multiple file*/}
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', mt: 2, mb: 2, width: '100%' }}>
           <Box >

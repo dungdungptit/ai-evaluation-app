@@ -35,6 +35,7 @@ const AdminMainStyle = styled('div')(({ theme }) => ({
     overflow: 'auto',
     minHeight: '100vh',
     display: 'flex',
+    backgroundColor: "#eaeff1",
     // paddingTop: APP_BAR_MOBILE + 24,
     paddingBottom: theme.spacing(10),
     [theme.breakpoints.up('lg')]: {
