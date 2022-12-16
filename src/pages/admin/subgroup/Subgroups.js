@@ -63,7 +63,7 @@ const Subgroups = () => {
         {
             field: 'groupId', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                `${groups.find(group => group.id === params.value).title}`
+                `${groups.find(group => group.id === params.value)?.title}`
             )
         },
         {
