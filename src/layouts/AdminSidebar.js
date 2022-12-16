@@ -12,6 +12,7 @@ import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import useWindowDimensions from '../components/useWindowDimensions/useWindowDimensions';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import DatasetLinkedIcon from '@mui/icons-material/DatasetLinked';
 
 const SidebarBox = styled(Box)({
     display: 'flex',
@@ -34,6 +35,8 @@ const getIndex = (path) => {
             return 4;
         case 'admin/admins':
             return 5;
+        case 'admin/datasets':
+            return 6;
         default:
             return -1;
     }
@@ -102,10 +105,10 @@ const AdminSidebar = () => {
         <Stack sx={{
             // display: { xs: 'none', lg: 'flex' },
             display: 'flex',
-            position: { 
-                xs: open ? 'fixed' : 'relative', 
+            position: {
+                xs: open ? 'fixed' : 'relative',
                 md: 'relative',
-                lg: 'relative' 
+                lg: 'relative'
             },
             zIndex: open ? 402 : 1,
             borderRight: '1px solid #e0e0e0',
@@ -115,7 +118,7 @@ const AdminSidebar = () => {
             transition: 'all 0.3s linear',
             minHeight: "100vh",
         }}>
-            <SidebarBox p={2} sx={{p: open ? 2 : 1, py: 1, transition: 'all 0.3s linear', }} >
+            <SidebarBox p={2} sx={{ p: open ? 2 : 1, py: 1, transition: 'all 0.3s linear', }} >
                 <Stack direction="row" spacing={0}
                     sx={{
                         alignItems: 'center',
@@ -132,7 +135,7 @@ const AdminSidebar = () => {
                     <MenuIcon sx={{ display: open ? "none" : "block", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickOpen} />
                     <MenuOpenIcon sx={{ display: open ? "block" : "none", color: "#6d7073", fontSize: 28, cursor: "pointer" }} onClick={handleClickClose} />
                 </Stack>
-                        
+
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
@@ -193,6 +196,17 @@ const AdminSidebar = () => {
                         </ListItemIcon>
                         <ListItemText primary="Submission" sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
+                    <ListItemButton
+                        component={Link}
+                        to={"/admin/datasets"}
+                        selected={selectedIndex === 6}
+                        onClick={(event) => handleListItemClick(event, 6)}
+                    >
+                        <ListItemIcon>
+                            <DatasetLinkedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Datasets" sx={{ display: open ? "block" : "none" }} />
+                    </ListItemButton>
 
                     {isSuperAdmin() && (
                         <ListItemButton
@@ -207,7 +221,7 @@ const AdminSidebar = () => {
                             <ListItemText primary="Admin" sx={{ display: open ? "block" : "none" }} />
                         </ListItemButton>
                     )}
-                    
+
                 </List>
             </SidebarBox>
         </Stack>

@@ -39,7 +39,7 @@ const columns = [
     )
   }
 },
-  { field: 'submit', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submits', mi10: 100, sortable: false },
+  { field: 'submissions', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submissions', minWidth: 120, sortable: false },
 ];
 
 const pageSize = 10;

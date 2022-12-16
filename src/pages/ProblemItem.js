@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Typography, Paper, Box, Button } from '@mui/material';
+import { Typography, Paper, Box, Button, CircularProgress } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import jupyter_img from "../../src/assets/images/1200px-Jupyter_logo.svg.png"
@@ -16,6 +16,8 @@ import { getProblemByIdAsync, problemSelector } from '../store/reducers/problemS
 import { getSubmissionByProblemIdAndUserIdAsync, getSubmissionByUserIdAsync, submissionProblemSelector, submissionUserSelector } from '../store/reducers/submissionSlice';
 import { findServerAsync, handleEvaluateAsync, hubSelector, setToken, setUsername } from '../store/reducers/hubSlice';
 
+import CustomPagination from '../components/DataTable/CustomPagination';
+import { green } from '@mui/material/colors';
 
 
 
@@ -23,6 +25,7 @@ const ProblemItem = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
+  const [loading, setLoading] = useState(false);
   console.log(params)
   const problemId = params.id;
 
@@ -51,17 +54,28 @@ const ProblemItem = () => {
         setUsername(res.payload.data.username);
         setToken(res.payload.data.token);
         window.open(`https://hub.zcode.vn/hub/login?username=${res.payload.data.username}&token=${res.payload.data.token}`, '_blank');
+        // sessionStorage.setItem('usernamehub', res.payload.data.username);
+        // sessionStorage.setItem('tokenhub', res.payload.data.token);
+        // set cookie for 1 day
+        // document.cookie = `usernamehub=${res.payload.data.username}; max-age=86400`;
+        // document.cookie = `tokenhub=${res.payload.data.token}; max-age=86400`;
       });
     }
-    else if(getServer.username !== '') {
+    else if (getServer.username !== '') {
+      // get cookie
+      // const usernamehub = document.cookie.split('; ').find(row => row.startsWith('usernamehub')).split('=')[1];
+      // const tokenhub = document.cookie.split('; ').find(row => row.startsWith('tokenhub')).split('=')[1];
+      // console.log(usernamehub, tokenhub);
       window.open(`https://hub.zcode.vn/hub/login?username=${getServer.username}&token=${getServer.token}`, '_blank');
     }
   }
 
   const handleEvalute = (e) => {
     e.preventDefault();
+    setLoading(true);
     if (getServer.username === '') {
       alert("Please get server first!");
+      setLoading(false);
       return;
     }
     console.log(getServer.username, problemId);
@@ -70,7 +84,13 @@ const ProblemItem = () => {
         username: getServer.username,
         problemId: problemId,
       }
-    ));
+    )).then((res) => {
+      console.log(res);
+      setLoading(false);
+    }).catch((err) => {
+      console.log(err);
+      setLoading(false);
+    })
   }
 
 
@@ -149,14 +169,26 @@ const ProblemItem = () => {
                 Setup Environment
               </Button>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', ml: 2 }} component="form" onSubmit={handleEvalute}>
-                <Button
-                  sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                >
-                  Evaluate
-                </Button>
+                <Box sx={{ m: 1, position: 'relative' }}>
+                  <Button variant="contained" type="submit" sx={{ ml: 1 }}
+                    disabled={loading}
+                  >
+                    Evaluate
+                    {loading && (
+                      <CircularProgress
+                        size={24}
+                        sx={{
+                          color: green[500],
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          marginTop: '-12px',
+                          marginLeft: '-12px',
+                        }}
+                      />
+                    )}
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Paper>
@@ -173,11 +205,11 @@ const ProblemItem = () => {
                 columns={columns}
                 disableSelectionOnClick
                 disableColumnMenu
-                hideFooter
+                // hideFooter
                 autoHeight
                 disableColumnSelector
-                pageSize={submissionProblem.length}
-                rowsPerPageOptions={[20]}
+                pageSize={20}
+                components={{ Pagination: CustomPagination, }}
                 sx={{
                   '& .MuiDataGrid-row': { cursor: 'pointer' },
                   "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {

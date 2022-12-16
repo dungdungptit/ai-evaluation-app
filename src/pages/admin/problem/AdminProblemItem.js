@@ -16,15 +16,7 @@ import { BoxContainer, BoxTitle } from '../../../components/Box/BoxContainer';
 
 
 
-const columns = [
-    { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'ID', minWidth: 50, sortable: false, },
-    { field: 'createdAt', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submission time', minWidth: 100, flex: 1, sortable: false, },
-    { field: 'problemName', headerClassName: 'super-app-theme--header', headerName: 'Problem', minWidth: 180, flex: 1, sortable: false },
-    { field: 'accuracyModel', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Accuracy Model', minWidth: 120, flex: 1, sortable: false },
-    { field: 'accuracyTest', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Accuracy Test', minWidth: 120, flex: 1, sortable: false },
-    { field: 'excutionTime', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Execution time', minWidth: 100, flex: 1, sortable: false, },
-    { field: 'excutionMemories', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Execution memory', minWidth: 100, flex: 1, sortable: false, },
-];
+
 
 
 const AdminProblemItem = () => {
@@ -40,9 +32,34 @@ const AdminProblemItem = () => {
     useEffect(() => {
         dispatch(getProblemByIdAsync(problemId));
     }, [dispatch])
-    const rowsData = history.filter((history) => history.problemId === 1);
 
-    const pageSize = rowsData.length;
+    const handleRowClickProblem = (params) => {
+        navigate(`/admin/problems/${params.row.problemId}`);
+    };
+
+    const columns = [
+        {
+            field: 'index', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'No', minWidth: 50, sortable: false,
+            // render index of table
+            renderCell: (index) => {
+                return (
+                    <strong>{index.api.getRowIndex(index.id) + 1}</strong>
+                )
+            }
+        },
+        {
+            field: 'updatedAt', headerClassName: 'super-app-theme--header', headerName: 'Submission Time', minWidth: 160, flex: 1, sortable: false,
+            renderCell: (params) => {
+                return (
+                    `${params.row.updatedAt.slice(0, 10)} ${params.row.updatedAt.slice(11, 19)}`
+                )
+            }
+        },
+        { field: 'description', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Description', minWidth: 100, flex: 1, sortable: false, },
+        { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false },
+        { field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false },
+        { field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false },
+    ];
 
     return (
         <BoxContainer>
@@ -59,7 +76,7 @@ const AdminProblemItem = () => {
                                 <Link underline="hover" color="inherit" href="/admin/problems">
                                     Problems
                                 </Link>
-                                <Typography color="text.primary">{problemItem.title}</Typography>
+                                <Typography color="text.primary">{problemItem?.title}</Typography>
                             </Breadcrumbs>
                         </Typography>
 
@@ -103,14 +120,14 @@ const AdminProblemItem = () => {
                             History :
                         </Typography>
                         <DataGrid
-                            rows={rowsData}
+                            rows={problemItem?.submissions}
                             columns={columns}
                             disableSelectionOnClick
                             disableColumnMenu
                             disableColumnSelector
                             hideFooter
                             autoHeight
-                            pageSize={pageSize}
+                            pageSize={problemItem?.submissions.length}
                             rowsPerPageOptions={[20]}
                             sx={{
                                 '& .MuiDataGrid-row': { cursor: 'pointer' },

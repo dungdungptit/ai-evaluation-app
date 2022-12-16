@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addNewProblem, deleteProblem, getAllProblems, getProblemById, updateProblem } from "../../services/problemApi";
+import { addNewProblem, deleteProblem, getAllProblems, getProblemById, updateProblem, getAllProblemsFree } from "../../services/problemApi";
 
 // get all problems
 export const getAllProblemsAsync = createAsyncThunk("problem/getAllProblems", getAllProblems);
@@ -16,11 +16,15 @@ export const updateProblemAsync = createAsyncThunk("problem/updateProblem", upda
 // delete problem
 export const deleteProblemAsync = createAsyncThunk("problem/deleteProblem", deleteProblem);
 
+// get all problems free
+export const getAllProblemsFreeAsync = createAsyncThunk("problem/getAllProblemsFree", getAllProblemsFree);
+
 const problemSlice = createSlice({
     name: "problem",
     initialState: {
         problems: [],
         problem: null,
+        problemfree: [],
         isLoading: false,
         error: null,
     },
@@ -94,7 +98,21 @@ const problemSlice = createSlice({
         [deleteProblemAsync.rejected]: (state, action) => {
             state.isLoading = false;
             state.error = action.payload.resMessage;
-        }
+        },
+
+        // get all problems free
+        [getAllProblemsFreeAsync.pending]: (state, action) => {
+            state.isLoading = true;
+        },
+        [getAllProblemsFreeAsync.fulfilled]: (state, action) => {
+            console.log(action.payload);
+            state.isLoading = false;
+            state.problemfree = action.payload.data;
+        },
+        [getAllProblemsFreeAsync.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload.resMessage;
+        },
     }
 });
 
@@ -102,5 +120,6 @@ const problemSlice = createSlice({
 const problemReducer = problemSlice.reducer;
 export const problemsSelector = (state) => state.problemReducer.problems;
 export const problemSelector = (state) => state.problemReducer.problem;
+export const problemfreeSelector = (state) => state.problemReducer.problemfree;
 
 export default problemReducer;

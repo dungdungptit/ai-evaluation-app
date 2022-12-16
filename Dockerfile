@@ -1,6 +1,7 @@
 FROM node:18-alpine
 # Declaring env
 ENV NODE_ENV=production
+ENV REACT_APP_API_URL=https://api-evaluation-backend.zcode.vn
 
 # Create app directory
 WORKDIR /app

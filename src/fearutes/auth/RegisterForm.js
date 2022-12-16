@@ -44,7 +44,7 @@ const RegisterForm = () => {
                         navigate('/login');
                     }
                 }).catch(() => {
-                    setValues({ ...values, resMessage: 'Register failed!' });
+                    setValues({ ...values, resMessage: 'Username already exists' });
                 })
         }
     }

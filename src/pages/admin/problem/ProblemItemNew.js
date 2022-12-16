@@ -1,10 +1,10 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react'
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Typography, Paper, Box, TextField, Button, MenuItem, Breadcrumbs, Link } from '@mui/material';
+import { Typography, Paper, Box, TextField, Button, MenuItem, Breadcrumbs, Link, CircularProgress, Alert } from '@mui/material';
 
 import { problems } from '../../../data/problems';
 import { groups } from '../../../data/group';
@@ -13,16 +13,28 @@ import { addNewProblemAsync } from '../../../store/reducers/problemSlice';
 import { getAllGroupsAsync, groupsSelector } from '../../../store/reducers/groupSlice';
 import { getAllSubgroupsAsync, subgroupsSelector } from '../../../store/reducers/subgroupSlice';
 import { BoxContainer } from '../../../components/Box/BoxContainer';
+import { green } from '@mui/material/colors';
+
+const checkEmpty = (data) => {
+    for (const key in data) {
+        if (data[key] === '') {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 const ProblemItemNew = ({ state }) => {
     // state = "new" or "edit"
+    const [loading, setLoading] = useState(false);
+    const [messageValidate, setMessageValidate] = useState('')
     const [problem, setProblem] = React.useState(
         {
             title: '',
             description: '',
             inputDescription: '',
             outputDescription: '',
-            group: '',
             groupId: '',
             subGroupId: '',
         }
@@ -51,6 +63,10 @@ const ProblemItemNew = ({ state }) => {
         console.log(problem);
     };
 
+    useEffect(() => {
+        checkEmpty(problem) ? setMessageValidate('Please fill all fields') : setMessageValidate('');
+    }, [problem])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("Submit");
@@ -61,8 +77,22 @@ const ProblemItemNew = ({ state }) => {
             outputDescription: problem.outputDescription,
             subGroupId: problem.subGroupId,
         }
-        dispatch(addNewProblemAsync(newProblem));
-        navigate('/admin/problems');
+        if (checkEmpty(newProblem)) {
+            return;
+        }
+        else {
+            setLoading(true);
+            dispatch(addNewProblemAsync(newProblem)).then((res) => {
+                setLoading(false);
+                console.log(res);
+                if (res.type === 'problem/addNewProblem/fulfilled') {
+                    navigate('/admin/problems');
+                }
+            }).catch((err) => {
+                setLoading(false);
+                console.log(err);
+            })
+        }
     };
 
     return (
@@ -79,7 +109,7 @@ const ProblemItemNew = ({ state }) => {
                         Problems
                     </Link>
                     <Typography color="text.primary">
-                        "New Problem"
+                        New Problem
                     </Typography>
                 </Breadcrumbs>
             </Typography>
@@ -144,7 +174,7 @@ const ProblemItemNew = ({ state }) => {
                 </TextField>
 
                 {/* Subgroup */}
-                <TextField sx={{ m: 1, width: "100%" }}
+                <TextField sx={{ m: 1, width: "100%", mb: 3 }}
                     id="outlined-select-currency"
                     select
                     label="Subgroup"
@@ -161,9 +191,30 @@ const ProblemItemNew = ({ state }) => {
 
                 </TextField>
 
+                {messageValidate && messageValidate !== '' ? <Alert sx={{width: "100%", boxSizing: 'border-box'}} severity="error">{messageValidate}</Alert> : null}
+
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', mt: 2, mb: 2 }}>
                     <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate('/admin/problems')}>Cancel</Button>
-                    <Button variant="contained" type="submit" sx={{ ml: 2 }}>Submit</Button>
+                    <Box sx={{ m: 1, position: 'relative' }}>
+                        <Button variant="contained" type="submit" sx={{ ml: 2 }}
+                            disabled={messageValidate !== '' || loading}
+                        >
+                            Submit
+                            {loading && (
+                                <CircularProgress
+                                    size={24}
+                                    sx={{
+                                        color: green[500],
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        marginTop: '-12px',
+                                        marginLeft: '-12px',
+                                    }}
+                                />
+                            )}
+                        </Button>
+                    </Box>
                 </Box>
             </Paper>
             {/* end form */}

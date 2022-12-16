@@ -9,6 +9,7 @@ import { BoxProblems, BoxTitle } from '../components/Box/BoxContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProblemsAsync, problemsSelector } from '../store/reducers/problemSlice';
 import { getSubmissionByUserIdAsync, submissionUserSelector } from '../store/reducers/submissionSlice';
+import CustomPagination from '../components/DataTable/CustomPagination';
 
 const History = () => {
 
@@ -61,8 +62,7 @@ const History = () => {
       ),
     },
     { field: 'description', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Description', minWidth: 100, flex: 1, sortable: false, },
-    { field: 'accuracyModel', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy Model', minWidth: 130, flex: 1, sortable: false },
-    { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy Test', minWidth: 120, flex: 1, sortable: false },
+    { field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false },
     { field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false },
     { field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false },
   ];
@@ -77,16 +77,17 @@ const History = () => {
           <DataGrid
             rows={submissions}
             columns={columns}
-            onRowClick={handleRowClick}
+            // onRowClick={handleRowClick}
             disableSelectionOnClick
             disableColumnMenu
-            hideFooter
+            // hideFooter
             autoHeight
             disableColumnSelector
-            pageSize={submissions.length}
+            pageSize={20}
+            components={{ Pagination: CustomPagination, }}
             rowsPerPageOptions={[20]}
             sx={{
-              '& .MuiDataGrid-row': { cursor: 'pointer' },
+              // '& .MuiDataGrid-row': { cursor: 'pointer' },
               "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
                 outline: "none"
               }

@@ -66,10 +66,8 @@ const Problems = () => {
             )
         },
         {
-            field: 'submit', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submits', minWidth: 100, sortable: false,
-            renderCell: (params) => (
-                "0"
-            ),
+            field: 'submissions', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submissions', minWidth: 120, sortable: false,
+            
         },
         {
             field: 'action', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Action', flex: 1, minWidth: 200, sortable: false,

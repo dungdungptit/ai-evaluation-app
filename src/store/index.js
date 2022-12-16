@@ -7,6 +7,7 @@ import userReducer from "./reducers/userSlice";
 import submissionReducer from "./reducers/submissionSlice";
 import hubReducer from "./reducers/hubSlice";
 import adminReducer from "./reducers/adminSlice";
+import datasetReducer from "./reducers/datasetSlice";
 
 // store
 const store = configureStore({
@@ -18,7 +19,8 @@ const store = configureStore({
         userReducer,
         adminReducer,
         submissionReducer,
-        hubReducer
+        hubReducer,
+        datasetReducer
     }
 })
 

@@ -34,7 +34,7 @@ const LoginForm = () => {
         }
       })
       .catch(() => {
-        setValues({ ...values, resMessage: 'Login failed!' });
+        setValues({ ...values, resMessage: 'Username or password is incorrect' });
         console.log(auth);
       })
   }

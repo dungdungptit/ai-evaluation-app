@@ -8,6 +8,12 @@ export const getAllProblems = async () => {
     return respone.data;
 };
 
+// get all problems free
+export const getAllProblemsFree = async () => {
+    const respone = await axios.get(`${base_URL}/api/v1/problems/free`, {headers: {token: token}});
+    return respone.data;
+};
+
 // get problem by id
 export const getProblemById = async (id) => {
     const respone = await axios.get(`${base_URL}/api/v1/problems/${id}`, {headers: {token: token}});

@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -25,8 +25,20 @@ function makeItems(data) {
     return items;
 }
 
+const checkEmpty = (data) => {
+    for (const key in data) {
+        if (data[key] === '') {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 const ProblemItemEdit = ({ state }) => {
     // state = "new" or "edit"
+    const [loading, setLoading] = useState(false);
+    const [messageValidate, setMessageValidate] = useState('')
     const [problem, setProblem] = React.useState(
         {
             title: '',
@@ -36,6 +48,10 @@ const ProblemItemEdit = ({ state }) => {
             subGroupId: '',
         }
     );
+
+    useEffect(() => {
+        checkEmpty(problem) ? setMessageValidate('Please fill all fields') : setMessageValidate('');
+    }, [problem])
 
     const navigate = useNavigate();
     const params = useParams();
@@ -76,8 +92,20 @@ const ProblemItemEdit = ({ state }) => {
             outputDescription: problem.outputDescription,
             subGroupId: problem.subGroupId,
         }
-        dispatch(updateProblemAsync(newProblem));
-        navigate('/admin/problems');
+        if (checkEmpty(newProblem)) {
+            return;
+        }
+        else {
+            setLoading(true);
+            dispatch(updateProblemAsync(newProblem)).then((res) => {
+                setLoading(false);
+                console.log(res);
+                // navigate('/admin/problems');
+            }).catch((err) => {
+                setLoading(false);
+                console.log(err);
+            })
+        }
     };
 
     return (
