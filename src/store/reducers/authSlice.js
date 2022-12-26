@@ -46,7 +46,7 @@ const authSlice = createSlice({
         [loginAsync.rejected]: (state, action) => {
             console.log('error');
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // register
@@ -65,7 +65,7 @@ const authSlice = createSlice({
         },
         [registerAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         }
     },
 })

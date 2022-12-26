@@ -1,7 +1,9 @@
 import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import account from "../data/account";
+import { logout } from "../store/reducers/authSlice";
 
 const MENU_OPTIONS = [
     {
@@ -36,10 +38,13 @@ const AccountPopover = () => {
     const handleCloseAccountMenu = () => {
         setAnchorElAccount(null);
     };
+    
+    const dispatch = useDispatch();
 
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        dispatch(logout());
         navigate('/login');
     };
 

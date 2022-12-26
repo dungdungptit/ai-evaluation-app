@@ -175,7 +175,7 @@ const ProblemItemNew = ({ state }) => {
                     }}
                 >
 
-                    {!!datasets && datasets.length > 0 &&
+                    {!!datasets && datasets?.length > 0 &&
                         datasets.map((option) => (
                             <MenuItem key={option.id} value={option.id}>
                                 {option.title}

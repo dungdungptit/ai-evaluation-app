@@ -37,7 +37,7 @@ const groupSlice = createSlice({
         },
         [getAllGroupsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get group by id
@@ -51,7 +51,7 @@ const groupSlice = createSlice({
         },
         [getGroupByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // add new group
@@ -64,7 +64,7 @@ const groupSlice = createSlice({
         },
         [addNewGroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update group
@@ -77,7 +77,7 @@ const groupSlice = createSlice({
         },
         [updateGroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete group
@@ -90,7 +90,7 @@ const groupSlice = createSlice({
         },
         [deleteGroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         }
     },
 });

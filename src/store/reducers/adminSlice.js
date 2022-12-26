@@ -37,7 +37,7 @@ const adminSlice = createSlice({
         },
         [getAllAdminsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get admin by id
@@ -51,7 +51,7 @@ const adminSlice = createSlice({
         },
         [getAdminByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // add new admin
@@ -65,7 +65,7 @@ const adminSlice = createSlice({
         },
         [addNewAdminAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update admin
@@ -79,7 +79,7 @@ const adminSlice = createSlice({
         },
         [updateAdminAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete admin
@@ -93,7 +93,7 @@ const adminSlice = createSlice({
         },
         [deleteAdminAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         }
     }
 });

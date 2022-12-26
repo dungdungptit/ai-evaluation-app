@@ -7,7 +7,7 @@ import {
 import CustomPagination from "./CustomPagination";
 
 const DataTable = ({ rows, columns }) => {
-    let pageSize = rows.length;
+    let pageSize = rows?.length;
     if (pageSize < 10) {
         pageSize = 10;
     }
@@ -57,7 +57,7 @@ const DataTable = ({ rows, columns }) => {
                     mb: 0
                 },
             }}
-            rowCount={rows.length}
+            rowCount={rows?.length}
         />
 
     )

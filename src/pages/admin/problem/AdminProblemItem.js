@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // @mui/material
-import { Typography, Paper, Box, TextField, IconButton, Stack, Button, Breadcrumbs, Link } from '@mui/material';
+import { Typography, Paper, Box, TextField, IconButton, Stack, Button, Breadcrumbs, Link, TableCell, TableRow, TableBody, TableHead, Table, TableContainer } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -13,6 +13,7 @@ import { history } from "../../../data/historys";
 import { getProblemByIdAsync, problemSelector } from '../../../store/reducers/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { BoxContainer, BoxTitle } from '../../../components/Box/BoxContainer';
+import { base_URL } from '../../../utils/constants';
 
 
 
@@ -55,25 +56,25 @@ const AdminProblemItem = () => {
                 )
             }
         },
-        
+
         {
-            field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.accuracyTest).toFixed(2) + '%'
+                Number(params.row.accuracy).toFixed(2) + '%'
             )
-          },
-          {
-            field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false,
+        },
+        {
+            field: 'executionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Time', minWidth: 120, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.excutionTime).toFixed(2) + 's'
+                Number(params.row.executionTime).toFixed(2) + 's'
             )
-          },
-          {
-            field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false,
+        },
+        {
+            field: 'executionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Memories', minWidth: 160, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.excutionMemories) > 1024 ? (Number(params.row.excutionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.excutionMemories).toFixed(0) + 'B'
+                Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
             )
-          },
+        },
     ];
 
     return (
@@ -123,9 +124,65 @@ const AdminProblemItem = () => {
                         </Typography>
                         <Typography variant="h6" component="h2" gutterBottom>
                             <Box fontWeight="fontWeightBold" mb={1}>
+                                Video Input Sample:
+                            </Box>
+                            <video src={`${base_URL}/${problemItem.inputSample}`} controls width="100%" height="auto" />
+                        </Typography>
+                        <Typography variant="h6" component="h2" gutterBottom>
+                            <Box fontWeight="fontWeightBold" mb={1}>
                                 Output :
                             </Box>
                             {problemItem.outputDescription}
+                        </Typography>
+                        <Typography variant="h6" component="h2" gutterBottom sx={{ width: "100%" }}>
+                            <Box fontWeight="fontWeightBold" mb={1}>
+                                Output Sample:
+                            </Box>
+                            {problemItem?.outputTable && (
+                                <TableContainer component={Paper}
+                                    elevation={0}
+                                    sx={{
+                                        '& .MuiTableCell-head': {
+                                            color: '#000',
+                                            border: '1px solid #0e0e0e',
+                                            fontWeight: 'bold',
+                                            fontSize: 18
+                                        },
+                                        '& .MuiTableCell-body': {
+                                            color: '#000',
+                                            border: '1px solid #0e0e0e',
+                                        },
+                                        // border: '1px solid #0c0c0c',
+                                    }}>
+                                    <Table sx={{
+                                        minWidth: 360,
+                                        borderCollapse: 'separate',
+                                    }}
+
+                                        aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center">frame_x</TableCell>
+                                                <TableCell align="center">predict</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {problemItem?.outputTable.map((row, index) => (
+                                                index < 10 &&
+                                                <TableRow
+                                                    key={index}
+                                                // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell align="center">{row.fram_x}</TableCell>
+                                                    <TableCell align="center">{row.predict}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            )
+                            }
+                            <Link component={'a'} href={`${base_URL}/${problemItem.outputSample}`} width="100%" height="auto" sx={{ cursor: 'pointer', textDecoration: 'none', textAlign: 'right', display: 'block', boxSizing: 'border-box', p: 1 }}> Download Output Sample</Link>
                         </Typography>
                     </Paper>
 
@@ -142,7 +199,7 @@ const AdminProblemItem = () => {
                             disableColumnSelector
                             hideFooter
                             autoHeight
-                            pageSize={problemItem?.submissions.length}
+                            pageSize={problemItem?.submissions?.length > 20 ? 20 : problemItem?.submissions?.length}
                             rowsPerPageOptions={[20]}
                             sx={{
                                 '& .MuiDataGrid-row': { cursor: 'pointer' },

@@ -132,9 +132,9 @@ const LoginForm = () => {
           <FormControlLabel control={<Checkbox />} label="Remember me" />
         </FormGroup>
 
-        {values.resMessage && (
+        {values?.resMessage && (
           <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#f44336', textAlign: 'center', fontSize: "1rem", m:"0px !important",  mb: "16px !important" }}>
-            {values.resMessage}
+            {values?.resMessage}
           </Typography>
         )}
         <ButtonDefault type='submit' variant="contained">Submit</ButtonDefault>

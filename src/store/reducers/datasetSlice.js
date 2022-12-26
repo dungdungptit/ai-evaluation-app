@@ -33,7 +33,7 @@ const datasetSlice = createSlice({
         },
         [getAllDatasetsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // getDatasetAsync
@@ -46,7 +46,7 @@ const datasetSlice = createSlice({
         },
         [getDatasetAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // addNewDatasetAsync
@@ -59,7 +59,7 @@ const datasetSlice = createSlice({
         },
         [addNewDatasetAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // deleteDatasetAsync
@@ -72,7 +72,7 @@ const datasetSlice = createSlice({
         },
         [deleteDatasetAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
 
@@ -86,7 +86,7 @@ const datasetSlice = createSlice({
         },
         [addNewDatasetSampleAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // deleteDatasetSampleAsync
@@ -99,7 +99,7 @@ const datasetSlice = createSlice({
         },
         [deleteDatasetSampleAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
     },
 });

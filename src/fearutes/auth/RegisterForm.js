@@ -205,9 +205,9 @@ const RegisterForm = () => {
                 </FormControl>
 
                 {/* username already */}
-                {values.resMessage && (
+                {values?.resMessage && (
                     <Typography variant='body1' sx={{ fontWeight: 400, width: "100%", color: '#f44336', textAlign: 'center', fontSize: "1rem", m: "0px !important", mb: "16px !important" }}>
-                        {values.resMessage}
+                        {values?.resMessage}
                     </Typography>
                 )}
 

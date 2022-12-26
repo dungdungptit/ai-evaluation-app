@@ -54,7 +54,7 @@ const Users = () => {
             }
         },
         {
-            field: 'username', headerClassName: 'super-app-theme--header', headerName: 'User Name', minWidth: 250, flex: 2,
+            field: 'username', headerClassName: 'super-app-theme--header', headerName: 'User Name', minWidth: 200, flex: 1,
         },
         { field: 'email', headerClassName: 'super-app-theme--header', headerName: 'Email', minWidth: 200, flex: 1, sortable: false, },
         { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: 'First Name', minWidth: 200, flex: 1, sortable: false, },

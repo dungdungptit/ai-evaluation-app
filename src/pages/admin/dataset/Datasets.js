@@ -53,7 +53,7 @@ const Datasets = () => {
             field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Title', minWidth: 250, flex: 1,
             renderCell: (params) => {
                 return (
-                    <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClickDataset(params)}>
+                    <Link sx={{ cursor: 'pointer', textDecoration: 'none' }}onClick={() => handleRowClickDataset(params)}>
                         {params.row?.title}
                     </Link>
                 )

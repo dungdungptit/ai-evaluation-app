@@ -37,7 +37,7 @@ const subgroupSlice = createSlice({
         },
         [getAllSubgroupsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get subgroup by id
@@ -51,7 +51,7 @@ const subgroupSlice = createSlice({
         },
         [getSubgroupByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // add new subgroup
@@ -64,7 +64,7 @@ const subgroupSlice = createSlice({
         },
         [addNewSubgroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update subgroup
@@ -77,7 +77,7 @@ const subgroupSlice = createSlice({
         },
         [updateSubgroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete subgroup
@@ -90,7 +90,7 @@ const subgroupSlice = createSlice({
         },
         [deleteSubgroupAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
     },
 });

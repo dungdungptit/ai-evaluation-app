@@ -37,7 +37,7 @@ const userSlice = createSlice({
         },
         [getAllUsersAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get user by id
@@ -51,7 +51,7 @@ const userSlice = createSlice({
         },
         [getUserByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // add new user
@@ -65,7 +65,7 @@ const userSlice = createSlice({
         },
         [addNewUserAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update user
@@ -79,7 +79,7 @@ const userSlice = createSlice({
         },
         [updateUserAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete user
@@ -93,7 +93,7 @@ const userSlice = createSlice({
         },
         [deleteUserAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         }
     }
 });

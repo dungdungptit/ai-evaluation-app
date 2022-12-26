@@ -15,15 +15,15 @@ import { addNewDatasetSampleAsync, datasetSelector, getAllDatasetsAsync, getData
 import { green } from '@mui/material/colors';
 
 const checkName2ListFile = (list1, list2) => {
-    if (list1.length !== list2.length) {
+    if (list1?.length !== list2?.length) {
         return false;
     }
-    if (list1.length > 0 && list2.length > 0) {
+    if (list1?.length > 0 && list2?.length > 0) {
         const list1Name = list1.map((item) => item.name.split('.')[0]);
         const list2Name = list2.map((item) => item.name.split('.')[0]);
         console.log(list1Name);
         console.log(list2Name);
-        return list1Name.every((item) => list2Name.includes(item)) && list1Name.length === list2Name.length;
+        return list1Name.every((item) => list2Name.includes(item)) && list1Name?.length === list2Name?.length;
     }
     return false;
 }
@@ -62,13 +62,13 @@ const DatasetSampleNew = () => {
     }
 
     const fileChangedHandlerVideos = (e) => {
-        if (e.target.files.length < 1) {
+        if (e.target.files?.length < 1) {
             return;
         }
         const files = e.target.files;
         console.log(files);
         const filesChecked = []
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files?.length; i++) {
             const file = files[i];
             if (isValidFileVideos(file)) {
                 //file is valid
@@ -88,13 +88,13 @@ const DatasetSampleNew = () => {
     }
 
     const fileChangedHandlerCsvs = (e) => {
-        if (e.target.files.length < 1) {
+        if (e.target.files?.length < 1) {
             return;
         }
         const files = e.target.files;
         console.log(files);
         const filesChecked = []
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files?.length; i++) {
             const file = files[i];
             if (isValidFileCsvs(file)) {
                 //file is valid
@@ -224,7 +224,7 @@ const DatasetSampleNew = () => {
               </Button> */}
                         </Box>
                         {/* display file name */}
-                        {videos.length > 0 && videos.map((video, index) => (
+                        {videos?.length > 0 && videos.map((video, index) => (
                             <Typography variant="body2" component="p" fontWeight='bold' gutterBottom key={index}
                                 sx={{ mt: 2, mb: 3, fontSize: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                             >
@@ -262,7 +262,7 @@ const DatasetSampleNew = () => {
               </Button> */}
                         </Box>
                         {/* display file name */}
-                        {results.length > 0 && results.map((result, index) => (
+                        {results?.length > 0 && results.map((result, index) => (
                             <Typography variant="body2" component="p" fontWeight='bold' gutterBottom key={index}
                                 sx={{ mt: 2, mb: 3, fontSize: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                             >

@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteSubmissionAsync, getAllSubmissionsAsync, submissionsSelector } from '../../../store/reducers/submissionSlice.js';
 import { getAllProblemsAsync, problemsSelector } from '../../../store/reducers/problemSlice';
 import { getAllUsersAsync, usersSelector } from '../../../store/reducers/userSlice';
+import CustomPagination from '../../../components/DataTable/CustomPagination';
 
 
 // const rowsData = submissions;
@@ -45,7 +46,7 @@ const Submissions = () => {
         console.log(param);
         console.log(event);
         console.log(location.pathname);
-        navigate(`/admin/submissions/${param.row.id}`, { state: param.row });
+        navigate(`/admin/submission/${param.row.id}`, { state: param.row });
 
     };
 
@@ -76,36 +77,36 @@ const Submissions = () => {
             renderCell: (params) => (
                 // <Link sx={{cursor: 'pointer'}} onClick={() => handleRowClickProblem(params)}>
                 // </Link>
-                    `${users.find(user => user.id === params.row.userId)?.username}`
+                `${users.find(user => user.id === params.row.userId)?.username}`
             ),
         },
         {
             field: 'problemId', headerClassName: 'super-app-theme--header', headerName: 'Problem', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                <Link sx={{cursor: 'pointer'}} onClick={() => handleRowClickProblem(params)}>
+                <Link sx={{ cursor: 'pointer', textDecoration: 'none' }}onClick={() => handleRowClickProblem(params)}>
                     {problems.find(problem => problem.id === params.row.problemId)?.title}
                 </Link>
             ),
         },
-        
+
         {
-            field: 'accuracyTest', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.accuracyTest).toFixed(2) + '%'
+                Number(params.row.accuracy).toFixed(2) + '%'
             )
-          },
-          {
-            field: 'excutionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Time', minWidth: 120, flex: 1, sortable: false,
+        },
+        {
+            field: 'executionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Time', minWidth: 120, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.excutionTime).toFixed(2) + 's'
+                Number(params.row.executionTime) > 1000 ? (Number(params.row.executionTime) / 1000).toFixed(2) + 's' : Number(params.row.executionTime).toFixed(2) + 'ms'
             )
-          },
-          {
-            field: 'excutionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Excution Memories', minWidth: 160, flex: 1, sortable: false,
+        },
+        {
+            field: 'executionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Memories', minWidth: 160, flex: 1, sortable: false,
             renderCell: (params) => (
-              Number(params.row.excutionMemories) > 1024 ? (Number(params.row.excutionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.excutionMemories).toFixed(0) + 'B'
+                Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
             )
-          },
+        },
     ];
 
     return (
@@ -127,8 +128,33 @@ const Submissions = () => {
                         </Typography>
                     </BoxStack>
 
-
-                    <DataTable rows={submissions} columns={columns} />
+                    {!!submissions?.length && (
+                        <DataGrid
+                            rows={submissions}
+                            columns={columns}
+                            onRowClick={handleRowClick}
+                            disableColumnMenu
+                            disableColumnSelector
+                            disableSelectionOnClick
+                            // hideFooter
+                            autoHeight
+                            pageSize={10}
+                            rowsPerPageOptions={[10]}
+                            // disableColumnFilter
+                            disableDensitySelector
+                            sx={{
+                                '& .MuiDataGrid-row': { cursor: 'pointer' },
+                                "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+                                    outline: "none"
+                                }
+                            }}
+                            components={{
+                                Pagination: CustomPagination,
+                            }}
+                        // rowCount={100}
+                        />
+                    )}
+                    {/* <DataTable rows={submissions} columns={columns} /> */}
 
                 </BoxTitle>
             </BoxContainer>

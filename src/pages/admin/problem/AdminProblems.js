@@ -51,15 +51,15 @@ const Problems = () => {
             )
         },
         {
-            field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 250, flex: 2,
+            field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 200, flex: 1,
             renderCell: (params) => (
-                <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClick(params)}>{params.value}</Link>
+                <Link sx={{ cursor: 'pointer', textDecoration: 'none' }} onClick={() => handleRowClick(params)}>{params.value}</Link>
             ),
         },
         {
-            field: 'datasetTitle', headerClassName: 'super-app-theme--header', headerName: 'Dataset', minWidth: 100, flex: 1, sortable: false,
+            field: 'datasetTitle', headerClassName: 'super-app-theme--header', headerName: 'Dataset', minWidth: 160, flex: 1, sortable: false,
             renderCell: (params) => (
-                params.row.dataset?.title ? <Link sx={{ cursor: 'pointer' }} onClick={() => handleRowClickDataset(params)}>{params.row.dataset?.title}</Link> : "None"
+                params.row.dataset?.title ? <Link sx={{ cursor: 'pointer', textDecoration: 'none' }} onClick={() => handleRowClickDataset(params)}>{params.row.dataset?.title}</Link> : "None"
             )
         },
         {

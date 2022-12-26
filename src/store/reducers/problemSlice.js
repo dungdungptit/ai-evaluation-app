@@ -41,7 +41,7 @@ const problemSlice = createSlice({
         },
         [getAllProblemsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get problem by id
@@ -55,7 +55,7 @@ const problemSlice = createSlice({
         },
         [getProblemByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },  
         
         // add new problem
@@ -69,7 +69,7 @@ const problemSlice = createSlice({
         },
         [addNewProblemAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update problem
@@ -83,7 +83,7 @@ const problemSlice = createSlice({
         },
         [updateProblemAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete problem
@@ -97,7 +97,7 @@ const problemSlice = createSlice({
         },
         [deleteProblemAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get all problems free
@@ -111,7 +111,7 @@ const problemSlice = createSlice({
         },
         [getAllProblemsFreeAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
     }
 });

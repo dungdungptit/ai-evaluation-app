@@ -45,7 +45,7 @@ const submissionSlice = createSlice({
         },
         [getAllSubmissionsAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get submission by id
@@ -59,7 +59,7 @@ const submissionSlice = createSlice({
         },
         [getSubmissionByIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // add new submission
@@ -73,7 +73,7 @@ const submissionSlice = createSlice({
         },
         [addNewSubmissionAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // update submission
@@ -87,7 +87,7 @@ const submissionSlice = createSlice({
         },
         [updateSubmissionAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // delete submission
@@ -101,7 +101,7 @@ const submissionSlice = createSlice({
         },
         [deleteSubmissionAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get submission by user id
@@ -115,7 +115,7 @@ const submissionSlice = createSlice({
         },
         [getSubmissionByUserIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
 
         // get submission by problem id and user id
@@ -129,7 +129,7 @@ const submissionSlice = createSlice({
         },
         [getSubmissionByProblemIdAndUserIdAsync.rejected]: (state, action) => {
             state.isLoading = false;
-            state.error = action.payload.resMessage;
+            state.error = action.payload?.resMessage;
         },
     }
 });
