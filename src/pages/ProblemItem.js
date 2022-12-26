@@ -103,8 +103,10 @@ const ProblemItem = () => {
       setLoading(false);
       if (res.type === 'hub/handleEvaluate/fulfilled') {
         // alert("Evaluate successfully!");
-        // sessionStorage.removeItem('usernamehub');
-        // sessionStorage.removeItem('tokenhub');
+        dispatch(setUsername(''));
+        dispatch(setToken(''));
+        sessionStorage.removeItem('usernamehub');
+        sessionStorage.removeItem('tokenhub');
         navigate('/history');
       }
     }).catch((err) => {
@@ -231,7 +233,7 @@ const ProblemItem = () => {
                           key={index}
                         // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          <TableCell align="center">{row.fram_x}</TableCell>
+                          <TableCell align="center">{row.frame_x}</TableCell>
                           <TableCell align="center">{row.predict}</TableCell>
                         </TableRow>
                       ))}

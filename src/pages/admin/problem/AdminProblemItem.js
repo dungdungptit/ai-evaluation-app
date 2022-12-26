@@ -173,7 +173,7 @@ const AdminProblemItem = () => {
                                                     key={index}
                                                 // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 >
-                                                    <TableCell align="center">{row.fram_x}</TableCell>
+                                                    <TableCell align="center">{row.frame_x}</TableCell>
                                                     <TableCell align="center">{row.predict}</TableCell>
                                                 </TableRow>
                                             ))}

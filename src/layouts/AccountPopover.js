@@ -45,7 +45,8 @@ const AccountPopover = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         dispatch(logout());
-        navigate('/login');
+        window.location.reload();
+        // navigate('/login');
     };
 
     const useAuth = () => {
