@@ -13,6 +13,7 @@ import { BoxProblems, BoxProblemsStack, BoxStack, BoxTitle } from '../components
 import CustomPagination from '../components/DataTable/CustomPagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProblemsAsync, problemsSelector } from '../store/reducers/problemSlice';
+import { setToken, setUsername } from '../store/reducers/hubSlice';
 
 
 const columns = [
@@ -25,20 +26,22 @@ const columns = [
     }
   },
   { field: 'title', headerClassName: 'super-app-theme--header', headerName: 'Problems', minWidth: 250, flex: 2 },
-  { field: 'group', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false, 
+  {
+    field: 'group', headerClassName: 'super-app-theme--header', headerName: 'Group', minWidth: 200, flex: 1, sortable: false,
     renderCell: (params) => {
       return (
-          `${params.row.group.title}`
+        `${params.row.group.title}`
       )
     }
-},
-  { field: 'subGroup', headerClassName: 'super-app-theme--header', headerName: 'Subgroup', minWidth: 200, flex: 1, sortable: false,
-  renderCell: (params) => {
-    return (
+  },
+  {
+    field: 'subGroup', headerClassName: 'super-app-theme--header', headerName: 'Subgroup', minWidth: 200, flex: 1, sortable: false,
+    renderCell: (params) => {
+      return (
         `${params.row.subGroup.title}`
-    )
-  }
-},
+      )
+    }
+  },
   { field: 'submissions', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: 'Submissions', minWidth: 120, sortable: false },
 ];
 
@@ -58,6 +61,10 @@ const Problems = () => {
 
   useEffect(() => {
     dispatch(getAllProblemsAsync());
+    dispatch(setUsername(''));
+    dispatch(setToken(''));
+    sessionStorage.removeItem('usernamehub');
+    sessionStorage.removeItem('tokenhub');
   }, [dispatch])
 
   const requestSearch = (searchValue) => {
