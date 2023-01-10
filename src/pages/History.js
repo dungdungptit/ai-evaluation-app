@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProblemsAsync, problemsSelector } from '../store/reducers/problemSlice';
 import { getSubmissionByUserIdAsync, submissionUserSelector } from '../store/reducers/submissionSlice';
 import CustomPagination from '../components/DataTable/CustomPagination';
+import { Report, SummaryReport } from '../components/Report';
 
 const History = () => {
 
@@ -61,11 +62,34 @@ const History = () => {
         </Link>
       ),
     },
-
     {
-      field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+      field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 100, flex: 1, sortable: false,
       renderCell: (params) => (
-        Number(params.row.accuracy).toFixed(2) + '%'
+        params.row.accuracy === null ? 'None' : Number(params.row.accuracy).toFixed(2) + '%'
+      )
+    },
+    {
+      field: 'precision', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Precision', minWidth: 100, flex: 1, sortable: false,
+      renderCell: (params) => (
+        params.row.precision === null ? 'None' : Number(params.row.precision).toFixed(2) + '%'
+      )
+    },
+    {
+      field: 'recall', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Recall', minWidth: 100, flex: 1, sortable: false,
+      renderCell: (params) => (
+        params.row.recall === null ? 'None' : Number(params.row.recall).toFixed(2) + '%'
+      )
+    },
+    {
+      field: 'f1score', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'F1-score', minWidth: 100, flex: 1, sortable: false,
+      renderCell: (params) => (
+        params.row.f1score === null ? 'None' : Number(params.row.f1score).toFixed(2) + '%'
+      )
+    },
+    {
+      field: 'selectionRate', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Frame Selection Rate', minWidth: 180, flex: 1, sortable: false,
+      renderCell: (params) => (
+        Number(params.row.selectionRate)
       )
     },
     {
@@ -80,6 +104,12 @@ const History = () => {
         Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
       )
     },
+    {
+      field: 'report', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Dowload Report', minWidth: 160, flex: 1, sortable: false,
+      renderCell: (params) => (
+        <Report id={params.row.id} />
+      )
+    },
   ];
 
   return (
@@ -88,6 +118,8 @@ const History = () => {
         <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom sx={{ mt: 3 }}>
           History
         </Typography>
+        
+      {/* <SummaryReport info={problem} /> */}
         {!!submissions?.length && (
           <DataGrid
             rows={submissions}

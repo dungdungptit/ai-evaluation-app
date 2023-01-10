@@ -20,6 +20,7 @@ import { deleteSubmissionAsync, getAllSubmissionsAsync, submissionsSelector } fr
 import { getAllProblemsAsync, problemsSelector } from '../../../store/reducers/problemSlice';
 import { getAllUsersAsync, usersSelector } from '../../../store/reducers/userSlice';
 import CustomPagination from '../../../components/DataTable/CustomPagination';
+import { Report } from '../../../components/Report';
 
 
 // const rowsData = submissions;
@@ -83,16 +84,39 @@ const Submissions = () => {
         {
             field: 'problemId', headerClassName: 'super-app-theme--header', headerName: 'Problem', minWidth: 200, flex: 1, sortable: false,
             renderCell: (params) => (
-                <Link sx={{ cursor: 'pointer', textDecoration: 'none' }}onClick={() => handleRowClickProblem(params)}>
+                <Link sx={{ cursor: 'pointer', textDecoration: 'none' }} onClick={() => handleRowClickProblem(params)}>
                     {problems.find(problem => problem.id === params.row.problemId)?.title}
                 </Link>
             ),
         },
-
         {
-            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 100, flex: 1, sortable: false,
             renderCell: (params) => (
-                Number(params.row.accuracy).toFixed(2) + '%'
+                params.row.accuracy === null ? 'None' : Number(params.row.accuracy).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'precision', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Precision', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.precision === null ? 'None' : Number(params.row.precision).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'recall', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Recall', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.recall === null ? 'None' : Number(params.row.recall).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'f1score', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'F1-score', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.f1score === null ? 'None' : Number(params.row.f1score).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'selectionRate', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Frame Selection Rate', minWidth: 180, flex: 1, sortable: false,
+            renderCell: (params) => (
+                Number(params.row.selectionRate)
             )
         },
         {
@@ -105,6 +129,12 @@ const Submissions = () => {
             field: 'executionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Memories', minWidth: 160, flex: 1, sortable: false,
             renderCell: (params) => (
                 Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
+            )
+        },
+        {
+            field: 'report', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Dowload Report', minWidth: 160, flex: 1, sortable: false,
+            renderCell: (params) => (
+                <Report id={params.row.id} />
             )
         },
     ];

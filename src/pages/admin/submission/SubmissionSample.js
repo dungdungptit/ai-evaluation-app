@@ -18,21 +18,20 @@ import { getAllProblemsAsync, problemsSelector } from '../../../store/reducers/p
 import { getAllUsersAsync, usersSelector } from '../../../store/reducers/userSlice';
 import { DataGrid } from '@mui/x-data-grid';
 import CustomPagination from '../../../components/DataTable/CustomPagination';
-import { Report } from '../../../components/Report';
 
 
-const SubmissionItem = () => {
+const SubmissionSample = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  // Click render SubmissionItem
+  // Click render SubmissionSample
   const navigate = useNavigate();
   const submissionItem = useSelector(submissionSelector);
   const submissionSamples = submissionItem?.details || [];
   const submissionId = useParams().id;
 
 
-  // Click render SubmissionItem
+  // Click render SubmissionSample
 
 
 
@@ -70,15 +69,16 @@ const SubmissionItem = () => {
       }
     },
     {
-      field: 'updatedAt', headerClassName: 'super-app-theme--header', headerName: 'Submission Time', minWidth: 160, flex: 1, sortable: false,
-      renderCell: (params) => {
-        return (
-          `${params.row.updatedAt.slice(0, 10)} ${params.row.updatedAt.slice(11, 19)}`
-        )
-      }
+      field: 'input', headerClassName: 'super-app-theme--header', headerName: 'Test', minWidth: 120, flex: 1, sortable: false,
+      renderCell: (params) => (
+        'Image Test'
+      )
     },
     {
-      field: 'input', headerClassName: 'super-app-theme--header', headerName: 'Input', minWidth: 120, flex: 1, sortable: false,
+      field: 'updated', headerClassName: 'super-app-theme--header', headerName: 'Predicted', minWidth: 120, flex: 1, sortable: false,
+      renderCell: (params) => (
+        'Image Predicted'
+      )
     },
     {
       field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 100, flex: 1, sortable: false,
@@ -104,18 +104,6 @@ const SubmissionItem = () => {
         params.row.f1score === null ? 'None' : Number(params.row.f1score).toFixed(2) + '%'
       )
     },
-    {
-      field: 'executionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Time', minWidth: 120, flex: 1, sortable: false,
-      renderCell: (params) => (
-        Number(params.row.executionTime) > 1000 ? (Number(params.row.executionTime) / 1000).toFixed(0) + 's' : Number(params.row.executionTime).toFixed(0) + 'ms'
-      )
-    },
-    {
-      field: 'executionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Memories', minWidth: 160, flex: 1, sortable: false,
-      renderCell: (params) => (
-        Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
-      )
-    },
   ];
 
   return (
@@ -138,7 +126,7 @@ const SubmissionItem = () => {
                 <Typography color="text.primary">{submissionItem?.id}</Typography>
               </Breadcrumbs>
             </Typography>
-            <Report id={submissionItem?.id} title={'Download report'}/>
+
           </BoxStack>
 
           <Paper elevation={0} sx={{
@@ -158,18 +146,6 @@ const SubmissionItem = () => {
               </Typography>
               <Typography variant="h6">
                 Accuracy: {Number(submissionItem?.accuracy).toFixed(2) + '%'}
-              </Typography>
-              <Typography variant="h6">
-                Precision: {Number(submissionItem?.precision).toFixed(2) + '%'}
-              </Typography>
-              <Typography variant="h6">
-                Recall: {Number(submissionItem?.recall).toFixed(2) + '%'}
-              </Typography>
-              <Typography variant="h6">
-                F1-score: {Number(submissionItem?.f1score).toFixed(2) + '%'}
-              </Typography>
-              <Typography variant="h6">
-                Frame Selection Rate: {Number(submissionItem?.selectionRate)}
               </Typography>
               <Typography variant="h6">
                 Execution Time: {Number(submissionItem?.executionTime) > 1000 ? (Number(submissionItem?.executionTime) / 1000).toFixed(0) + 's' : Number(submissionItem?.executionTime).toFixed(0) + 'ms'}
@@ -212,4 +188,4 @@ const SubmissionItem = () => {
   )
 }
 
-export default SubmissionItem
+export default SubmissionSample

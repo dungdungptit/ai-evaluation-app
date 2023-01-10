@@ -14,6 +14,8 @@ import { getProblemByIdAsync, problemSelector } from '../../../store/reducers/pr
 import { useDispatch, useSelector } from 'react-redux';
 import { BoxContainer, BoxTitle } from '../../../components/Box/BoxContainer';
 import { base_URL } from '../../../utils/constants';
+import { getAllUsersAsync, usersSelector } from '../../../store/reducers/userSlice';
+import { Report, SummaryReport } from '../../../components/Report';
 
 
 
@@ -26,11 +28,13 @@ const AdminProblemItem = () => {
     const params = useParams();
     console.log(params)
     const problemId = params.id;
+    const users = useSelector(usersSelector);
 
     const dispatch = useDispatch();
     const problemItem = useSelector(problemSelector);
 
     useEffect(() => {
+        dispatch(getAllUsersAsync());
         dispatch(getProblemByIdAsync(problemId));
     }, [dispatch])
 
@@ -56,23 +60,60 @@ const AdminProblemItem = () => {
                 )
             }
         },
-
         {
-            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 120, flex: 1, sortable: false,
+            field: 'userId', headerClassName: 'super-app-theme--header', headerName: 'Username', minWidth: 100, flex: 2,
             renderCell: (params) => (
-                Number(params.row.accuracy).toFixed(2) + '%'
+                // <Link sx={{cursor: 'pointer'}} onClick={() => handleRowClickProblem(params)}>
+                // </Link>
+                `${users.find(user => user.id === params.row.userId)?.username}`
+            ),
+        },
+        {
+            field: 'accuracy', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Accuracy', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.accuracy === null ? 'None' : Number(params.row.accuracy).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'precision', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Precision', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.precision === null ? 'None' : Number(params.row.precision).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'recall', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Recall', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.recall === null ? 'None' : Number(params.row.recall).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'f1score', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'F1-score', minWidth: 100, flex: 1, sortable: false,
+            renderCell: (params) => (
+                params.row.f1score === null ? 'None' : Number(params.row.f1score).toFixed(2) + '%'
+            )
+        },
+        {
+            field: 'selectionRate', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Frame Selection Rate', minWidth: 180, flex: 1, sortable: false,
+            renderCell: (params) => (
+                Number(params.row.selectionRate)
             )
         },
         {
             field: 'executionTime', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Time', minWidth: 120, flex: 1, sortable: false,
             renderCell: (params) => (
-                Number(params.row.executionTime).toFixed(2) + 's'
+                Number(params.row.executionTime) > 1000 ? (Number(params.row.executionTime) / 1000).toFixed(2) + 's' : Number(params.row.executionTime).toFixed(2) + 'ms'
             )
         },
         {
             field: 'executionMemories', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Execution Memories', minWidth: 160, flex: 1, sortable: false,
             renderCell: (params) => (
                 Number(params.row.executionMemories) > 1024 ? (Number(params.row.executionMemories) / 1024).toFixed(0) + 'KB' : Number(params.row.executionMemories).toFixed(0) + 'B'
+            )
+        },
+        {
+            field: 'report', headerClassName: 'super-app-theme--header', align: "center", headerAlign: "center", headerName: 'Dowload Report', minWidth: 160, flex: 1, sortable: false,
+            renderCell: (params) => (
+                <Report id={params.row.id} />
             )
         },
     ];
@@ -162,19 +203,33 @@ const AdminProblemItem = () => {
                                         aria-label="simple table">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell align="center">frame_x</TableCell>
-                                                <TableCell align="center">predict</TableCell>
+                                                {problemItem?.outputTable[0] && Object.keys(problemItem?.outputTable[0]).map((key, index) => (
+                                                    <TableCell align="center" key={index}>{key}</TableCell>
+                                                ))}
                                             </TableRow>
                                         </TableHead>
-                                        <TableBody>
+                                        <TableBody sx={{
+                                            '& .MuiTableCell-body:last-child': {
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: 1,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                wordBreak: 'break-all',
+                                            },
+                                            '& .MuiTableCell-body': {
+                                                py: 0,
+                                            }
+                                        }}>
                                             {problemItem?.outputTable.map((row, index) => (
                                                 index < 10 &&
                                                 <TableRow
                                                     key={index}
                                                 // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 >
-                                                    <TableCell align="center">{row.frame_x}</TableCell>
-                                                    <TableCell align="center">{row.predict}</TableCell>
+                                                    {Object.keys(row).map((key, index) => (
+                                                        <TableCell align="center" key={index}>{row[key]}</TableCell>
+                                                    ))}
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -188,9 +243,12 @@ const AdminProblemItem = () => {
 
 
                     <BoxTitle>
-                        <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom marginTop={4}>
-                            History :
-                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                            <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom marginTop={4}>
+                                History :
+                            </Typography>
+                            <SummaryReport info={problemItem} />
+                        </Box>
                         <DataGrid
                             rows={problemItem?.submissions}
                             columns={columns}

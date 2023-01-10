@@ -18,7 +18,7 @@ import Register from '../pages/Register';
 import { GroupEdit, GroupItem, GroupNew, Groups } from '../pages/admin/group';
 import Subgroups from '../pages/admin/subgroup/Subgroups';
 import { SubgroupEdit, SubgroupItem, SubgroupNew } from '../pages/admin/subgroup';
-import { Submissions, SubmissionItem } from '../pages/admin/submission';
+import { Submissions, SubmissionItem, SubmissionSample } from '../pages/admin/submission';
 import { Datasets, DatasetItem, DatasetNew, DatasetSampleNew } from '../pages/admin/dataset';
 
 const AppRouter = () => {
@@ -86,6 +86,8 @@ const AppRouter = () => {
 
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/submission" element={<Submissions />} />}
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/submission/:id" element={<SubmissionItem />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/submission/sample/:id" element={<SubmissionSample />} />}
+                    {(isAdmin() || isSuperAdmin()) && <Route path="admin/submission/frame/:id" element={<SubmissionItem />} />}
 
 
                     {(isAdmin() || isSuperAdmin()) && <Route path="admin/datasets" element={<Datasets />} />}
